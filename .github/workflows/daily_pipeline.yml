@@ -1,0 +1,87 @@
+name: Daily Pipeline
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # 8:00 AM GMT+7
+  workflow_dispatch:
+    inputs:
+      skip_fetch:
+        description: "Skip fetch_repos (re-use existing data)"
+        type: boolean
+        default: false
+
+jobs:
+  fetch:
+    name: "1 · Fetch repos"
+    runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_fetch }}
+    env:
+      GIT_TOKEN:    ${{ secrets.GIT_TOKEN }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python fetch_repos.py
+
+  analyze:
+    name: "2 · Analyse with Gemini"
+    needs: fetch
+    if: always()   # run even if fetch was skipped
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL:   ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY:   ${{ secrets.SUPABASE_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python analyze_repos.py
+
+  trend:
+    name: "3 · Trend analysis"
+    needs: analyze
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python trend_analysis.py
+
+  export:
+    name: "4 · Export dashboard"
+    needs: trend
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python export_all.py
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          keep_files: true   # preserve weekly/insight output from other pipelines
