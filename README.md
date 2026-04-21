@@ -1,12 +1,6 @@
 # ⬡ AI Hub
 
-> Hệ thống theo dõi, phân tích và trực quan hoá AI repos — gộp từ **ai-tracker**, **ai-weekly**, và **ai-insight** thành một repo duy nhất.
-
-[![Daily Pipeline](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/daily_pipeline.yml/badge.svg)](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/daily_pipeline.yml)
-[![Weekly Pipeline](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/weekly_pipeline.yml/badge.svg)](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/weekly_pipeline.yml)
-[![Insight Pipeline](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/insight_pipeline.yml/badge.svg)](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/insight_pipeline.yml)
-
-🌐 **Live Dashboard:** `https://YOUR_USERNAME.github.io/ai-hub`
+🌐 **Live Dashboard:** `https://thuingit.github.io/ai-github-news`
 
 ---
 
@@ -49,7 +43,7 @@ GitHub Actions
 ## Cấu trúc repo
 
 ```
-ai-hub/
+ai-github-news/
 │
 ├── config.py               # Tất cả constants (model, tables, thresholds)
 │
@@ -83,8 +77,8 @@ ai-hub/
 ### 1. Clone repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ai-hub.git
-cd ai-hub
+git clone https://github.com/thuingit/ai-github-news.git
+cd ai-github-news
 pip install -r requirements.txt
 ```
 
