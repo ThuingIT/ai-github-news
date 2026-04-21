@@ -5,577 +5,275 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300;1,9..144,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ── Reset & tokens ─────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#07090f;
-  --surface:#0e1117;
-  --surface2:#151a24;
-  --border:#1d2535;
-  --border2:#263044;
-  --text:#dde3ef;
-  --muted:#5a6480;
-  --muted2:#3d4760;
-  --blue:#4f9cf9;
-  --purple:#9d72ff;
-  --green:#36d97b;
-  --amber:#f5a623;
-  --pink:#f472b6;
-  --teal:#2dd4bf;
-  --red:#f87171;
-  --radius:10px;
-  --font-mono:'Space Mono',monospace;
-  --font-serif:'Instrument Serif',serif;
-  --font-sans:'Geist',sans-serif;
+  --bg:#080c14;--bg2:#0d1220;--surface:#111826;--surface2:#18202e;
+  --border:#1e2a3d;--border2:#28395a;
+  --text:#c8d4e8;--text2:#7a8faa;--text3:#3d5070;
+  --blue:#4f9cf9;--purple:#9d72ff;--green:#36d97b;
+  --amber:#f5a623;--pink:#f472b6;--teal:#2dd4bf;--red:#f87171;
+  --r:10px;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'Fraunces',serif;
+  --sans:'DM Sans',sans-serif;
 }
-
-body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:15px;line-height:1.65;min-height:100vh}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh}
 a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
-button{font-family:var(--font-sans);cursor:pointer}
+button{font-family:var(--sans);cursor:pointer;border:none}
 
-/* ── App shell ──────────────────────────────────────────── */
-.app{display:flex;flex-direction:column;min-height:100vh}
-
-/* ── Nav ────────────────────────────────────────────────── */
-.nav{
-  display:flex;align-items:center;gap:2rem;
-  padding:.9rem 2rem;
-  border-bottom:1px solid var(--border);
-  background:var(--bg);
-  position:sticky;top:0;z-index:100;
-  backdrop-filter:blur(12px);
-}
-.nav-brand{
-  font-family:var(--font-mono);font-size:.85rem;font-weight:700;
-  color:var(--blue);letter-spacing:-.02em;white-space:nowrap;
-}
-.nav-tabs{display:flex;gap:0;margin-left:auto}
-.nav-tab{
-  background:none;border:none;border-bottom:2px solid transparent;
-  color:var(--muted);padding:.5rem 1.1rem;font-size:.8rem;
-  letter-spacing:.05em;text-transform:uppercase;
-  transition:all .2s;margin-bottom:-1px;
-}
+/* Nav */
+.nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:1.5rem;
+  padding:.85rem 2rem;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  border-bottom:1px solid var(--border);backdrop-filter:blur(16px)}
+.nav-brand{font-family:var(--serif);font-size:1.1rem;font-weight:600;color:#e8f0ff;letter-spacing:-.02em;flex-shrink:0}
+.nav-brand span{color:var(--blue)}
+.nav-tabs{display:flex;gap:2px}
+.nav-tab{background:none;border-bottom:2px solid transparent;color:var(--text2);
+  padding:.45rem 1rem;font-size:.8rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;transition:all .2s}
 .nav-tab:hover{color:var(--text)}
 .nav-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
-.nav-meta{font-size:.7rem;color:var(--muted2);font-family:var(--font-mono);white-space:nowrap}
+.nav-spacer{flex:1}
+.nav-time{font-family:var(--mono);font-size:.68rem;color:var(--text3);white-space:nowrap}
 
-/* ── Stats pills ────────────────────────────────────────── */
-.stats-bar{
-  display:flex;gap:.6rem;padding:.8rem 2rem;
-  border-bottom:1px solid var(--border);background:var(--surface);
-  flex-wrap:wrap;
-}
-.stat-pill{
-  font-size:.72rem;color:var(--muted);
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:99px;padding:.2rem .8rem;
-}
-.stat-pill b{color:var(--text)}
+/* Stats bar */
+.stats-bar{display:flex;align-items:center;gap:.5rem;padding:.6rem 2rem;
+  background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--text2);
+  padding:.2rem .7rem;background:var(--surface);border:1px solid var(--border);border-radius:99px;white-space:nowrap}
+.stat b{color:var(--text);font-weight:500}
+.stat-div{width:1px;height:16px;background:var(--border);margin:0 .25rem}
 
-/* ── Tab panels ─────────────────────────────────────────── */
-.tab-panel{display:none;padding:1.5rem 2rem;flex:1}
+/* Tab panels */
+.tab-panel{display:none;padding:1.5rem 2rem;animation:fadeIn .2s ease}
 .tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
-/* ── Repos: filter bar ──────────────────────────────────── */
-.filter-bar{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
-.filter-btn{
-  background:var(--surface2);border:1px solid var(--border);color:var(--muted);
-  border-radius:8px;padding:.3rem .85rem;font-size:.75rem;
-  transition:all .2s;
-}
-.filter-btn:hover,.filter-btn.active{
-  background:#4f9cf918;border-color:var(--blue);color:var(--blue);
-}
+/* Toolbar */
+.toolbar{display:flex;gap:.45rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
+.filter-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);
+  border-radius:8px;padding:.3rem .8rem;font-size:.75rem;transition:all .2s}
+.filter-btn:hover{color:var(--text);border-color:var(--border2)}
+.filter-btn.active{background:#4f9cf918;border-color:var(--blue);color:var(--blue)}
+.search-box{margin-left:auto;background:var(--surface);border:1px solid var(--border);
+  color:var(--text);border-radius:8px;padding:.3rem .85rem;font-size:.8rem;font-family:var(--sans);
+  outline:none;width:220px;transition:border-color .2s}
+.search-box:focus{border-color:var(--blue)}
+.search-box::placeholder{color:var(--text3)}
+.count-badge{font-family:var(--mono);font-size:.7rem;color:var(--text3)}
 
-/* ── Card grid ──────────────────────────────────────────── */
-.card-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
-  gap:1rem;
-}
+/* Card grid */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
 
-/* ── Repo card ──────────────────────────────────────────── */
-.card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:1.1rem;
-  cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s;
-  position:relative;overflow:hidden;
-}
-.card::after{
-  content:'';position:absolute;inset:0;top:0;height:2px;
-  background:linear-gradient(90deg,var(--blue),var(--purple));
-  opacity:0;transition:opacity .2s;
-}
-.card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 16px 48px #00000050}
-.card:hover::after{opacity:1}
+/* Card */
+.card{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.1rem 1.1rem 1rem;
+  transition:border-color .2s,transform .15s,box-shadow .2s}
+.card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 12px 40px #00000060}
+.card-accent{position:absolute;top:0;left:0;right:0;height:2px;opacity:.7}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem}
+.card-left{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
+.cat-badge{font-family:var(--mono);font-size:.58rem;font-weight:600;
+  padding:.15rem .5rem;border-radius:4px;letter-spacing:.04em;text-transform:uppercase}
+.cat-badge.xai{background:#102a54;color:#60a5fa;border:1px solid #1a3d72}
+.cat-badge.trend{background:#1e0d44;color:#a78bfa;border:1px solid #2d1c5c}
+.domain-badge{font-size:.72rem;font-weight:500}
+.score-chip{font-family:var(--mono);font-size:1rem;font-weight:600;
+  width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  border-width:1.5px;border-style:solid;flex-shrink:0}
+.card-title{margin-bottom:.1rem}
+.card-title a{font-size:.98rem;font-weight:500;color:#dde8ff;letter-spacing:-.01em}
+.card-title a:hover{color:var(--blue);text-decoration:none}
+.card-owner{font-family:var(--mono);font-size:.65rem;color:var(--text3);margin-bottom:.6rem}
+.card-problem{font-size:.83rem;color:var(--text2);line-height:1.55;margin-bottom:.45rem;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-innov,.card-why{font-size:.78rem;color:var(--text2);line-height:1.45;margin-bottom:.35rem;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.attr-row,.tag-row,.topic-row{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem}
+.attr{font-size:.62rem;padding:.12rem .45rem;border-radius:4px;background:#0d2438;color:#38bdf8;border:1px solid #163654}
+.tag{font-size:.62rem;padding:.12rem .45rem;border-radius:4px;background:#0a1f38;color:#5ba3e8}
+.tag.purple{background:#160e30;color:#9d72ff}
+.topic{font-size:.6rem;padding:.1rem .4rem;border-radius:4px;background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.card-foot{display:flex;align-items:center;gap:.6rem;border-top:1px solid var(--border);padding-top:.6rem;margin-top:.5rem}
+.stars{font-size:.75rem;color:var(--amber);font-weight:500}
+.rel-bar{display:flex;align-items:center;gap:.4rem;flex:1}
+.rel-lbl{font-family:var(--mono);font-size:.6rem;color:var(--text3)}
+.rel-track{flex:1;height:3px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.rel-fill{height:100%;border-radius:99px}
+.rel-val{font-family:var(--mono);font-size:.62rem;color:var(--text3)}
 
-.card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem}
-.card-badges{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
-.cat-badge{
-  font-size:.62rem;font-weight:600;padding:.15rem .5rem;border-radius:5px;
-  text-transform:uppercase;letter-spacing:.04em;
-}
-.cat-badge.xai{background:#0a3d6b;color:#60a5fa}
-.cat-badge.trend{background:#2d1d5a;color:#a78bfa}
-.domain-badge{font-size:.62rem;padding:.15rem .5rem;border-radius:5px}
-
-.score-chip{
-  display:flex;align-items:center;justify-content:center;
-  width:38px;height:38px;border-radius:8px;
-  border:1.5px solid var(--sc,#4ade80);
-  color:var(--sc,#4ade80);
-  font-family:var(--font-mono);font-size:.95rem;font-weight:700;
-  box-shadow:0 0 16px color-mix(in srgb,var(--sc,#4ade80) 25%,transparent);
-  flex-shrink:0;
-}
-
-.card-title{
-  font-family:var(--font-sans);font-size:.95rem;font-weight:600;
-  color:#f0f4ff;margin-bottom:.1rem;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.card-owner{font-size:.68rem;color:var(--muted2);margin-bottom:.55rem}
-.card-problem{
-  font-size:.78rem;color:#8a95b0;line-height:1.5;margin-bottom:.45rem;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-}
-.card-innov{
-  font-size:.73rem;color:var(--muted);line-height:1.4;margin-bottom:.35rem;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-}
-.pills{display:flex;gap:.3rem;flex-wrap:wrap;margin:.45rem 0}
-.pill{
-  font-size:.6rem;padding:.1rem .4rem;border-radius:4px;
-  background:var(--surface2);border:1px solid var(--border2);color:var(--muted);
-}
-.tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.6rem}
-.tag{font-size:.6rem;padding:.1rem .4rem;background:#0b2244;color:#60a5fa;border-radius:4px}
-.tag.purple{background:#1e0d44;color:#a78bfa}
-.card-foot{
-  display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid var(--border);padding-top:.55rem;
-  font-size:.7rem;
-}
-.stars{color:var(--amber)}
-.rel{color:var(--muted)}
-
-/* ── Weekly layout ──────────────────────────────────────── */
-.weekly-layout{display:grid;grid-template-columns:180px 1fr;gap:1.5rem;min-height:60vh}
-.weekly-sidebar{padding-top:.5rem}
-.sidebar-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:.75rem}
-.week-list{display:flex;flex-direction:column;gap:.3rem}
-.week-btn{
-  background:none;border:1px solid var(--border);color:var(--muted);
-  border-radius:7px;padding:.35rem .7rem;font-size:.75rem;
-  text-align:left;transition:all .2s;
-}
-.week-btn:hover{background:var(--surface2);color:var(--text)}
-.week-btn.active{background:#4f9cf918;border-color:var(--blue);color:var(--blue)}
-
+/* Weekly */
+.weekly-wrap{display:grid;grid-template-columns:160px 1fr;gap:1.5rem;align-items:start}
+.weekly-sidebar{position:sticky;top:80px}
+.sidebar-lbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.6rem}
+#week-list{display:flex;flex-direction:column;gap:.3rem}
+.week-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);
+  border-radius:7px;padding:.35rem .7rem;font-size:.75rem;font-family:var(--mono);
+  text-align:left;transition:all .2s}
+.week-btn:hover{color:var(--text);background:var(--surface2)}
+.week-btn.active{background:#4f9cf914;border-color:var(--blue);color:var(--blue)}
 .weekly-main{min-width:0}
 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
-.kpi-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:1rem;text-align:center;
-}
-.kpi-val{font-family:var(--font-mono);font-size:1.6rem;font-weight:700;line-height:1}
-.kpi-lbl{font-size:.68rem;color:var(--muted);margin-top:.3rem}
-.kpi-delta{font-size:.7rem;font-weight:600;display:block;margin-top:.25rem}
-.kpi-delta.up{color:var(--green)}.kpi-delta.down{color:var(--red)}.kpi-delta.flat{color:var(--muted)}
-
-.weekly-body{display:grid;grid-template-columns:1fr 280px;gap:1.2rem;align-items:start}
-.analysis-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem}
-.section-title{font-family:var(--font-serif);font-size:1.1rem;font-style:italic;color:var(--text);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
-.weekly-charts{display:flex;flex-direction:column;gap:.8rem}
-.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
-.chart-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.8rem}
-
-.bar-list{display:flex;flex-direction:column;gap:.5rem}
-.bar-row{display:flex;align-items:center;gap:.5rem}
-.bar-name{font-size:.72rem;color:var(--text);min-width:72px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bar-track{flex:1;background:var(--surface2);border-radius:99px;height:5px;overflow:hidden}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:1rem .9rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.15rem}
+.kpi-icon{font-size:1.1rem;margin-bottom:.1rem}
+.kpi-val{font-family:var(--mono);font-size:1.7rem;font-weight:600;line-height:1}
+.kpi-lbl{font-size:.7rem;color:var(--text2)}
+.kpi-delta{font-family:var(--mono);font-size:.68rem;font-weight:600;margin-top:.1rem}
+.kpi-delta.up{color:var(--green)}.kpi-delta.dn{color:var(--red)}.kpi-delta.flat{color:var(--text3)}
+.weekly-body{display:grid;grid-template-columns:1fr 260px;gap:1.2rem;align-items:start}
+.analysis-col{min-width:0}
+.analysis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem}
+.charts-col{display:flex;flex-direction:column;gap:.8rem}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem}
+.chart-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.85rem}
+.bar-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.bar-name{font-size:.78rem;color:var(--text2);min-width:68px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;background:var(--surface2);border-radius:99px;height:6px;overflow:hidden}
 .bar-fill{height:100%;border-radius:99px;transition:width .5s ease}
-.bar-cnt{font-size:.68rem;color:var(--muted);min-width:20px;text-align:right}
+.bar-cnt{font-family:var(--mono);font-size:.65rem;color:var(--text3);min-width:18px;text-align:right}
+.top-repo-row{display:flex;align-items:center;gap:.5rem;padding:.45rem .5rem;
+  border-radius:6px;color:var(--text);transition:background .15s;margin-bottom:.2rem}
+.top-repo-row:hover{background:var(--surface2);text-decoration:none}
+.top-repo-rank{font-family:var(--mono);font-size:.65rem;color:var(--text3);min-width:22px}
+.top-repo-name{font-size:.83rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-repo-meta{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.top-repo-cat{font-size:.58rem;padding:.1rem .35rem;border-radius:3px}
+.top-repo-cat.xai{background:#102a54;color:#60a5fa}
+.top-repo-cat.trend{background:#1e0d44;color:#a78bfa}
+.top-repo-stars{font-size:.72rem;color:var(--amber)}
 
-.star-list{display:flex;flex-direction:column;gap:.4rem}
-.star-item{display:flex;justify-content:space-between;align-items:center;padding:.4rem .5rem;background:var(--surface2);border-radius:6px;color:var(--text);font-size:.78rem}
-.star-item:hover{background:var(--border)}
-.star-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px}
-.star-val{color:var(--amber);flex-shrink:0;font-size:.75rem}
-
-/* ── Markdown prose ─────────────────────────────────────── */
-.analysis-prose .md-h2{font-family:var(--font-serif);font-style:italic;font-size:1.05rem;color:var(--text);margin:1.2rem 0 .5rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+/* Analysis prose */
+.analysis-prose .md-h2{font-family:var(--serif);font-size:1.15rem;font-weight:600;font-style:italic;
+  color:#dde8ff;margin:1.5rem 0 .65rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
 .analysis-prose .md-h2:first-child{margin-top:0}
-.analysis-prose .md-p{font-size:.88rem;color:#8a95b0;line-height:1.75;margin-bottom:.7rem}
-.analysis-prose .md-ul{padding-left:1.2rem;margin-bottom:.7rem}
-.analysis-prose .md-li{font-size:.88rem;color:#8a95b0;line-height:1.65;margin-bottom:.2rem}
-.analysis-prose strong{color:var(--text)}
+.analysis-prose .md-p{font-size:.92rem;color:var(--text2);line-height:1.8;margin-bottom:.8rem}
+.analysis-prose .md-ul{padding-left:1.2rem;margin-bottom:.8rem}
+.analysis-prose .md-li{font-size:.9rem;color:var(--text2);line-height:1.7;margin-bottom:.25rem}
+.analysis-prose strong{color:var(--text);font-weight:500}
 .analysis-prose a{color:var(--blue)}
 
-/* ── Insight layout ─────────────────────────────────────── */
-.insight-layout{display:grid;grid-template-columns:1fr 220px;gap:1.5rem}
+/* Insight */
+.insight-wrap{display:grid;grid-template-columns:1fr 200px;gap:1.5rem;align-items:start}
 .insight-main{min-width:0}
-.insight-tabs{display:flex;gap:.4rem;margin-bottom:1.2rem}
-.itab{
-  background:var(--surface2);border:1px solid var(--border);color:var(--muted);
-  border-radius:8px;padding:.3rem .8rem;font-size:.78rem;transition:all .2s;
-}
+.insight-sidebar{position:sticky;top:80px}
+.pref-banner{display:flex;align-items:flex-start;gap:.85rem;background:var(--surface);
+  border:1px solid var(--border);border-left:3px solid var(--purple);
+  border-radius:var(--r);padding:.85rem 1rem;margin-bottom:1.1rem}
+.pref-banner-icon{font-size:1.3rem;flex-shrink:0;margin-top:.1rem}
+.pref-banner-body{flex:1;min-width:0}
+.pref-summary{font-size:.87rem;color:var(--text);margin-bottom:.4rem;line-height:1.5}
+.pref-stats{display:flex;flex-direction:column;gap:.2rem;font-size:.78rem;color:var(--text2);flex-shrink:0}
+.insight-tabs{display:flex;gap:.4rem;margin-bottom:1.1rem}
+.itab{background:var(--surface);border:1px solid var(--border);color:var(--text2);
+  border-radius:8px;padding:.35rem .9rem;font-size:.8rem;transition:all .2s}
 .itab:hover{color:var(--text)}
-.itab.active{background:#4f9cf918;border-color:var(--blue);color:var(--blue)}
+.itab.active{background:#4f9cf914;border-color:var(--blue);color:var(--blue)}
 .itab-panel{display:none}.itab-panel.active{display:block}
-
-.pattern-bar{
-  background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--purple);
-  border-radius:var(--radius);padding:.7rem 1rem;margin-bottom:1rem;
-  display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;
-}
-.pattern-lbl{font-size:.68rem;color:var(--muted);white-space:nowrap}
-.pattern-txt{font-size:.8rem;color:var(--text);flex:1}
-
 .feed-grid{display:flex;flex-direction:column;gap:.75rem}
-.feed-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:1rem;transition:border-color .2s;
-}
+.feed-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:1rem 1.1rem;transition:border-color .2s}
 .feed-card:hover{border-color:var(--border2)}
-.feed-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;gap:.5rem}
-.feed-name{font-weight:600;font-size:.88rem;color:var(--text)}
-.feed-name:hover{color:var(--blue)}
-.feed-problem{font-size:.78rem;color:#8a95b0;margin:.4rem 0}
-.feed-foot{display:flex;justify-content:space-between;align-items:center;margin-top:.5rem}
-.feed-actions{display:flex;gap:.35rem;flex-shrink:0}
-.btn-like,.btn-dislike{
-  background:none;border:1px solid var(--border);border-radius:6px;
-  padding:.2rem .55rem;font-size:.72rem;transition:all .2s;
-}
-.btn-like{color:var(--green)}
-.btn-like:hover,.btn-like.active{background:#0d4429;border-color:var(--green)}
-.btn-dislike{color:var(--red)}
-.btn-dislike:hover,.btn-dislike.active{background:#3d1a1a;border-color:var(--red)}
-
+.feed-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;gap:.75rem}
+.feed-title-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;flex:1;min-width:0}
+.feed-name{font-size:.95rem;font-weight:500;color:#dde8ff}
+.feed-name:hover{color:var(--blue);text-decoration:none}
+.feed-domain{font-size:.76rem;font-weight:500;margin-bottom:.35rem}
+.feed-problem{font-size:.87rem;color:var(--text2);line-height:1.55;margin-bottom:.5rem}
+.feed-actions{display:flex;gap:.3rem;flex-shrink:0}
+.btn-like,.btn-dislike{background:none;border:1px solid var(--border);border-radius:6px;
+  padding:.2rem .5rem;font-size:.75rem;transition:all .2s}
+.btn-like{color:var(--green)}.btn-like:hover,.btn-like.active{background:#0b3322;border-color:var(--green)}
+.btn-dislike{color:var(--red)}.btn-dislike:hover,.btn-dislike.active{background:#2d1212;border-color:var(--red)}
+.feed-foot{display:flex;align-items:center;gap:.7rem;margin-top:.6rem;border-top:1px solid var(--border);padding-top:.55rem}
+.score-meter{flex:1;height:3px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.score-meter-fill{height:100%;border-radius:99px}
+.score-val{font-family:var(--mono);font-size:.68rem;font-weight:600}
 .papers-list{display:flex;flex-direction:column;gap:.75rem}
-.paper-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:1rem;
-}
-.paper-title{font-weight:600;font-size:.85rem;color:var(--text);display:block;margin-bottom:.3rem;line-height:1.4}
-.paper-title:hover{color:var(--blue)}
-.paper-meta{font-size:.7rem;color:var(--muted);margin-bottom:.4rem}
-.paper-abstract{font-size:.78rem;color:#8a95b0;line-height:1.5}
+.paper-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem}
+.paper-date{font-family:var(--mono);font-size:.65rem;color:var(--text3);margin-bottom:.3rem}
+.paper-title{font-size:.9rem;font-weight:500;color:#c8d8f0;display:block;line-height:1.45;margin-bottom:.3rem}
+.paper-title:hover{color:var(--blue);text-decoration:none}
+.paper-authors{font-size:.75rem;color:var(--text3);margin-bottom:.5rem}
+.paper-abstract{font-size:.84rem;color:var(--text2);line-height:1.65}
+.sidebar-section{margin-bottom:1.5rem}
+.pref-row{display:flex;align-items:center;padding:.4rem .6rem;border-radius:5px;
+  font-size:.78rem;background:var(--surface);border:1px solid var(--border);
+  margin-bottom:.3rem;color:var(--text2)}
+.pref-like{border-left:2px solid var(--green)}
+.pref-dislike{border-left:2px solid var(--red)}
 
-.insight-sidebar{padding-top:3.2rem}
-.pref-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--text)}
-.badge-like{color:var(--green)} .badge-dislike{color:var(--red)}
+/* Empty */
+.empty{color:var(--text3);font-size:.85rem;padding:3rem;text-align:center}
+.empty-sm{color:var(--text3);font-size:.75rem;padding:.3rem 0;font-style:italic}
 
-/* ── Empty states ───────────────────────────────────────── */
-.empty{color:var(--muted);font-size:.85rem;padding:2rem;text-align:center}
-.empty-sm{color:var(--muted);font-size:.75rem;font-style:italic}
-
-/* ── Responsive ─────────────────────────────────────────── */
-@media(max-width:900px){
-  .weekly-layout,.weekly-body{grid-template-columns:1fr}
-  .weekly-sidebar{display:flex;gap:.4rem;flex-wrap:wrap}
+/* Responsive */
+@media(max-width:1024px){
+  .weekly-body,.weekly-wrap{grid-template-columns:1fr}
+  .weekly-sidebar{position:static;display:flex;flex-wrap:wrap;gap:.4rem}
+  #week-list{display:flex;flex-direction:row;flex-wrap:wrap;gap:.3rem}
   .kpi-row{grid-template-columns:repeat(2,1fr)}
 }
-@media(max-width:680px){
-  body{font-size:14px}
-  .nav{padding:.75rem 1rem;gap:1rem}
-  .nav-meta{display:none}
+@media(max-width:720px){
+  .nav{padding:.7rem 1rem;gap:1rem}
+  .nav-time{display:none}
   .tab-panel{padding:1rem}
-  .insight-layout{grid-template-columns:1fr}
+  .stats-bar{padding:.5rem 1rem}
+  .insight-wrap{grid-template-columns:1fr}
   .insight-sidebar{display:none}
-  .stats-bar{padding:.6rem 1rem}
 }
 </style>
 </head>
 <body>
-<div class="app">
-
-<!-- Nav -->
 <nav class="nav">
-  <span class="nav-brand">⬡ AI Hub</span>
+  <span class="nav-brand">⬡ <span>AI</span> Hub</span>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchTab('repos',this)">Repos</button>
     <button class="nav-tab" onclick="switchTab('weekly',this)">Weekly</button>
     <button class="nav-tab" onclick="switchTab('insight',this)">Insight</button>
   </div>
-  <span class="nav-meta">2026-04-21 08:19 UTC</span>
+  <span class="nav-spacer"></span>
+  <span class="nav-time">21 Apr 2026 · 12:00 UTC</span>
 </nav>
 
-<!-- Stats -->
 <div class="stats-bar">
-  <span class="stat-pill">📦 Total <b>12</b></span>
-  <span class="stat-pill">🔍 XAI <b>0</b></span>
-  <span class="stat-pill">🔥 Trending <b>12</b></span>
+  <span class="stat">📦 Total <b>12</b></span>
+  <span class="stat-div"></span>
+  <span class="stat">🔍 XAI <b>0</b></span>
+  <span class="stat">🔥 Trending <b>12</b></span>
+  <span class="stat-div"></span><span class="stat">🏆 Top domain <b>GenAI</b></span>
 </div>
 
-<!-- Tab: Repos -->
 <div class="tab-panel active" id="tab-repos">
-  <div class="filter-bar">
+  <div class="toolbar">
     <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
-    <button class="filter-btn" onclick="filterCards('XAI',this)">XAI</button>
+    <button class="filter-btn" onclick="filterCards('XAI',this)">XAI only</button>
     <button class="filter-btn" onclick="filterCards('Trending AI',this)">Trending</button>
     <button class="filter-btn" onclick="filterCards('high',this)">Score ≥ 70</button>
+    <button class="filter-btn" onclick="filterCards('GenAI',this)">GenAI</button>
+    <button class="filter-btn" onclick="filterCards('NLP',this)">NLP</button>
+    <button class="filter-btn" onclick="filterCards('Multimodal',this)">Multimodal</button>
+    <input class="search-box" type="text" placeholder="Search repos, tech, domain…" oninput="searchCards(this.value)">
+    <span class="count-badge" id="count-badge">12 repos</span>
   </div>
-  <div class="card-grid" id="card-grid"><article class="card" onclick="window.open('https://github.com/MemPalace/mempalace','_blank')" data-cat="Trending AI" data-score="95.0">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#60a5fa;background:#60a5fa18">NLP</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">95.0</div>
-  </header>
-  <h3 class="card-title">mempalace</h3>
-  <p class="card-owner">MemPalace/</p>
-  <p class="card-problem">Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM.</p>
-  <p class='card-innov'>💡 Sử dụng phương pháp lai (hybrid) kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian, cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.</p>
-  <p class='card-innov'>🔥 Repo này nổi bật vì đạt được độ chính xác truy xuất thông tin rất cao (trên 96% R@5) trong ngữ cảnh dài, cung cấp giải pháp mạnh mẽ và hiệu quả cho các hệ thống bộ nhớ AI.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">Semantic Search</span><span class="tag">LLM APIs (optional)</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 47.8k</span>
-    <span class="rel">relevance 9/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/JuliusBrussee/caveman','_blank')" data-cat="Trending AI" data-score="95.0">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#e879f9;background:#e879f918">GenAI</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">95.0</div>
-  </header>
-  <h3 class="card-title">caveman</h3>
-  <p class="card-owner">JuliusBrussee/</p>
-  <p class="card-problem">Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM).</p>
-  <p class='card-innov'>💡 Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).</p>
-  <p class='card-innov'>🔥 Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">LLM APIs</span><span class="tag">Claude API</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 37.5k</span>
-    <span class="rel">relevance 9/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/holaboss-ai/holaOS','_blank')" data-cat="Trending AI" data-score="88.3">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#e879f9;background:#e879f918">GenAI</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">88.3</div>
-  </header>
-  <h3 class="card-title">holaOS</h3>
-  <p class="card-owner">holaboss-ai/</p>
-  <p class="card-problem">Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển.</p>
-  <p class='card-innov'>💡 Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.</p>
-  <p class='card-innov'>🔥 Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  
-  <footer class="card-foot">
-    <span class="stars">★ 2.9k</span>
-    <span class="rel">relevance 9/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/calesthio/OpenMontage','_blank')" data-cat="Trending AI" data-score="87.7">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#e879f9;background:#e879f918">GenAI</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">87.7</div>
-  </header>
-  <h3 class="card-title">OpenMontage</h3>
-  <p class="card-owner">calesthio/</p>
-  <p class="card-problem">Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản.</p>
-  <p class='card-innov'>💡 Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.</p>
-  <p class='card-innov'>🔥 Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">Python</span><span class="tag">YAML</span><span class="tag">AI Agents</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 2.6k</span>
-    <span class="rel">relevance 9/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/Windy3f3f3f3f/how-claude-code-works','_blank')" data-cat="Trending AI" data-score="86.0">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#e879f9;background:#e879f918">GenAI</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">86.0</div>
-  </header>
-  <h3 class="card-title">how-claude-code-works</h3>
-  <p class="card-owner">Windy3f3f3f3f/</p>
-  <p class="card-problem">Hiểu và phân tích kiến trúc mã nguồn của các AI lập trình Agent hàng đầu, đặc biệt là Claude.</p>
-  <p class='card-innov'>💡 Cung cấp một phân tích sâu sắc và dễ tiếp cận về kiến trúc nội bộ phức tạp của một AI lập trình Agent hàng đầu.</p>
-  <p class='card-innov'>🔥 AI lập trình Agent là một công nghệ đang bùng nổ, và có nhu cầu lớn trong việc tìm hiểu cách các hệ thống thành công nhất hoạt động để ứng dụng hoặc phát triển thêm.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  
-  <footer class="card-foot">
-    <span class="stars">★ 1.9k</span>
-    <span class="rel">relevance 9/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/samber/cc-skills-golang','_blank')" data-cat="Trending AI" data-score="83.8">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#e879f9;background:#e879f918">GenAI</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">83.8</div>
-  </header>
-  <h3 class="card-title">cc-skills-golang</h3>
-  <p class="card-owner">samber/</p>
-  <p class="card-problem">Cải thiện hiệu quả và giảm gánh nặng ngữ cảnh cho trợ lý mã hóa AI khi xử lý các tác vụ lập trình chuyên biệt, đặc biệt là trong Golang.</p>
-  <p class='card-innov'>💡 Phát triển các bộ hướng dẫn (skill) AI agent tái sử dụng, chuyên biệt theo lĩnh vực (Go-specific), được tải theo yêu cầu để tránh làm phình to ngữ cảnh của trợ lý mã hóa.</p>
-  <p class='card-innov'>🔥 Sự kết hợp giữa AI agents, giải quyết vấn đề quản lý ngữ cảnh và tập trung vào Golang đã tạo ra một giải pháp được săn đón trong bối cảnh phát triển AI hiện nay.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">Golang</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 1.3k</span>
-    <span class="rel">relevance 9/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/Tencent-Hunyuan/HY-World-2.0','_blank')" data-cat="Trending AI" data-score="83.1">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#a78bfa;background:#a78bfa18">Multimodal</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">83.1</div>
-  </header>
-  <h3 class="card-title">HY-World-2.0</h3>
-  <p class="card-owner">Tencent-Hunyuan/</p>
-  <p class="card-problem">Xây dựng một mô hình thế giới đa phương thức có khả năng tái tạo, tạo ra và mô phỏng các thế giới 3D một cách hiệu quả.</p>
-  <p class='card-innov'>💡 Giới thiệu HY-World 2.0, một mô hình thế giới đa phương thức tiên tiến được thiết kế để xử lý đồng thời các nhiệm vụ tái tạo, tạo và mô phỏng môi trường 3D.</p>
-  <p class='card-innov'>🔥 Dự án này được chú ý vì giải quyết các thách thức cốt lõi trong việc tạo và mô phỏng thế giới 3D phức tạp, một lĩnh vực quan trọng cho các ứng dụng như thực tế ảo, robot và game.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  
-  <footer class="card-foot">
-    <span class="stars">★ 1.1k</span>
-    <span class="rel">relevance 9/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/AgriciDaniel/claude-obsidian','_blank')" data-cat="Trending AI" data-score="80.8">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#e879f9;background:#e879f918">GenAI</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">80.8</div>
-  </header>
-  <h3 class="card-title">claude-obsidian</h3>
-  <p class="card-owner">AgriciDaniel/</p>
-  <p class="card-problem">Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung.</p>
-  <p class='card-innov'>💡 Mang khả năng của mô hình ngôn ngữ lớn Claude trực tiếp vào môi trường ghi chú Obsidian, tối ưu hóa quy trình làm việc và tăng cường năng suất cho người dùng.</p>
-  <p class='card-innov'>🔥 Sự kết hợp giữa AI tiên tiến (Claude) và công cụ quản lý kiến thức phổ biến (Obsidian) đáp ứng nhu cầu tăng cường năng suất và tự động hóa trong công việc hàng ngày.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">Claude API</span><span class="tag">Obsidian</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 1.8k</span>
-    <span class="rel">relevance 8/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/kyegomez/OpenMythos','_blank')" data-cat="Trending AI" data-score="80.6">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#e879f9;background:#e879f918">GenAI</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">80.6</div>
-  </header>
-  <h3 class="card-title">OpenMythos</h3>
-  <p class="card-owner">kyegomez/</p>
-  <p class="card-problem">Simplifying the definition, configuration, and instantiation of large-scale AI models across a wide range of parameter sizes.</p>
-  <p class='card-innov'>💡 Offers a flexible framework with pre-configured AI model variants, enabling easy instantiation of models ranging from 1 billion to 1 trillion parameters with specified configurations.</p>
-  <p class='card-innov'>🔥 Its ability to provide easily configurable and scalable large language models (up to 1 trillion parameters) likely attracts researchers and developers working on advanced AI applications.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">Python</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 1.8k</span>
-    <span class="rel">relevance 8/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/Manavarya09/design-extract','_blank')" data-cat="Trending AI" data-score="77.5">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#94a3b8;background:#94a3b818">Other</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">77.5</div>
-  </header>
-  <h3 class="card-title">design-extract</h3>
-  <p class="card-owner">Manavarya09/</p>
-  <p class="card-problem">Tự động trích xuất và phân tích toàn diện các thuộc tính thiết kế hình ảnh và cấu trúc layout của một trang web để hiểu ngôn ngữ thiết kế của nó một cách có lập trình.</p>
-  <p class='card-innov'>💡 Hệ thống hóa việc thu thập dữ liệu bằng cách crawl, trích xuất hơn 25 thuộc tính kiểu tính toán và dữ liệu layout, sau đó xử lý và phân loại chúng để hiểu hệ thống thiết kế của một trang web.</p>
-  <p class='card-innov'>🔥 Nó tự động hóa việc phân tích thiết kế hình ảnh của trang web và cung cấp điểm số về khả năng tiếp cận, điều này cực kỳ hữu ích cho các nhà phát triển và nhà thiết kế.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">Playwright</span><span class="tag">Chromium</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 1.0k</span>
-    <span class="rel">relevance 8/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/dreddnafious/thereisnospoon','_blank')" data-cat="Trending AI" data-score="73.0">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#94a3b8;background:#94a3b818">Other</span>
-    </div>
-    <div class="score-chip" style="--sc:#4ade80">73.0</div>
-  </header>
-  <h3 class="card-title">thereisnospoon</h3>
-  <p class="card-owner">dreddnafious/</p>
-  <p class="card-problem">Software engineers struggle to understand and reason about machine learning systems with the same rigor they apply to traditional software.</p>
-  <p class='card-innov'>💡 It presents machine learning concepts from first principles, specifically designed to help software engineers reason about ML systems like they do about software.</p>
-  <p class='card-innov'>🔥 The provided summary does not contain enough information to determine why this repository would be trending.</p>
-  
-  
-  <footer class="card-foot">
-    <span class="stars">★ 1.1k</span>
-    <span class="rel">relevance 7/10</span>
-  </footer>
-</article>
-<article class="card" onclick="window.open('https://github.com/CoderLuii/HolyClaude','_blank')" data-cat="Trending AI" data-score="66.3">
-  <header class="card-head">
-    <div class="card-badges">
-      <span class="cat-badge trend">Trending AI</span>
-      <span class="domain-badge" style="color:#94a3b8;background:#94a3b818">Other</span>
-    </div>
-    <div class="score-chip" style="--sc:#fbbf24">66.3</div>
-  </header>
-  <h3 class="card-title">HolyClaude</h3>
-  <p class="card-owner">CoderLuii/</p>
-  <p class="card-problem">Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ.</p>
-  <p class='card-innov'>💡 Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.</p>
-  <p class='card-innov'>🔥 Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.</p>
-  <div class='pills'><span class="pill">real-world</span></div>
-  <div class='tags'><span class="tag">Docker</span><span class="tag">shell scripting</span><span class="tag">s6-overlay</span><span class="tag">Xvfb</span><span class="tag">CloudCLI</span></div>
-  <footer class="card-foot">
-    <span class="stars">★ 2.0k</span>
-    <span class="rel">relevance 5/10</span>
-  </footer>
-</article></div>
+  <div class="card-grid" id="card-grid"><article class="card" data-cat="Trending AI" data-score="95.0" data-domain="NLP" data-search="mempalace/mempalace giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống ai/llm. nlp semantic search llm apis (optional)"><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#60a5fa>💬 NLP</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">95.0</div></header><h3 class="card-title"><a href="https://github.com/MemPalace/mempalace" target="_blank" rel="noopener">mempalace</a></h3><p class="card-owner">MemPalace/</p><p class="card-problem">Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM.</p><p class=card-innov>💡 Sử dụng phương pháp lai (hybrid) kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian, cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.</p><p class=card-why>🔥 Repo này nổi bật vì đạt được độ chính xác truy xuất thông tin rất cao (trên 96% R@5) trong ngữ cảnh dài, cung cấp giải pháp mạnh mẽ và hiệu quả cho các hệ thống bộ nhớ AI.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">Semantic Search</span><span class="tag">LLM APIs (optional)</span></div><div class=topic-row><span class="topic">ai</span><span class="topic">chromadb</span><span class="topic">llm</span><span class="topic">mcp</span></div><footer class="card-foot"><span class="stars">★ 47.8k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:90%;background:#4ade80"></div></div><span class="rel-val">9/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="95.0" data-domain="GenAI" data-search="juliusbrussee/caveman chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (llm). genai llm apis claude api"><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#e879f9>🔮 GenAI</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">95.0</div></header><h3 class="card-title"><a href="https://github.com/JuliusBrussee/caveman" target="_blank" rel="noopener">caveman</a></h3><p class="card-owner">JuliusBrussee/</p><p class="card-problem">Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM).</p><p class=card-innov>💡 Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).</p><p class=card-why>🔥 Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">LLM APIs</span><span class="tag">Claude API</span></div><div class=topic-row><span class="topic">ai</span><span class="topic">anthropic</span><span class="topic">caveman</span><span class="topic">claude</span></div><footer class="card-foot"><span class="stars">★ 37.5k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:90%;background:#4ade80"></div></div><span class="rel-val">9/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="88.3" data-domain="GenAI" data-search="holaboss-ai/holaos cung cấp một môi trường cho các tác nhân ai để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển. genai "><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#e879f9>🔮 GenAI</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">88.3</div></header><h3 class="card-title"><a href="https://github.com/holaboss-ai/holaOS" target="_blank" rel="noopener">holaOS</a></h3><p class="card-owner">holaboss-ai/</p><p class="card-problem">Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển.</p><p class=card-innov>💡 Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.</p><p class=card-why>🔥 Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.</p><div class=attr-row><span class="attr">real-world</span></div><div class=topic-row><span class="topic">agent</span><span class="topic">agent-harness</span><span class="topic">agent-runtime</span><span class="topic">agentic</span></div><footer class="card-foot"><span class="stars">★ 2.9k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:90%;background:#4ade80"></div></div><span class="rel-val">9/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="87.7" data-domain="GenAI" data-search="calesthio/openmontage tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản. genai python yaml ai agents"><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#e879f9>🔮 GenAI</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">87.7</div></header><h3 class="card-title"><a href="https://github.com/calesthio/OpenMontage" target="_blank" rel="noopener">OpenMontage</a></h3><p class="card-owner">calesthio/</p><p class="card-problem">Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản.</p><p class=card-innov>💡 Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.</p><p class=card-why>🔥 Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">Python</span><span class="tag">YAML</span><span class="tag">AI Agents</span></div><div class=topic-row><span class="topic">agent</span><span class="topic">agentic-ai</span><span class="topic">ai</span><span class="topic">claude</span></div><footer class="card-foot"><span class="stars">★ 2.6k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:90%;background:#4ade80"></div></div><span class="rel-val">9/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="86.0" data-domain="GenAI" data-search="windy3f3f3f3f/how-claude-code-works hiểu và phân tích kiến trúc mã nguồn của các ai lập trình agent hàng đầu, đặc biệt là claude. genai "><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#e879f9>🔮 GenAI</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">86.0</div></header><h3 class="card-title"><a href="https://github.com/Windy3f3f3f3f/how-claude-code-works" target="_blank" rel="noopener">how-claude-code-works</a></h3><p class="card-owner">Windy3f3f3f3f/</p><p class="card-problem">Hiểu và phân tích kiến trúc mã nguồn của các AI lập trình Agent hàng đầu, đặc biệt là Claude.</p><p class=card-innov>💡 Cung cấp một phân tích sâu sắc và dễ tiếp cận về kiến trúc nội bộ phức tạp của một AI lập trình Agent hàng đầu.</p><p class=card-why>🔥 AI lập trình Agent là một công nghệ đang bùng nổ, và có nhu cầu lớn trong việc tìm hiểu cách các hệ thống thành công nhất hoạt động để ứng dụng hoặc phát triển thêm.</p><div class=attr-row><span class="attr">real-world</span></div><div class=topic-row><span class="topic">ai</span><span class="topic">ai-agent</span><span class="topic">anthropic</span><span class="topic">architecture</span></div><footer class="card-foot"><span class="stars">★ 1.9k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:90%;background:#4ade80"></div></div><span class="rel-val">9/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="83.8" data-domain="GenAI" data-search="samber/cc-skills-golang cải thiện hiệu quả và giảm gánh nặng ngữ cảnh cho trợ lý mã hóa ai khi xử lý các tác vụ lập trình chuyên biệt, đặc biệt là trong golang. genai golang"><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#e879f9>🔮 GenAI</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">83.8</div></header><h3 class="card-title"><a href="https://github.com/samber/cc-skills-golang" target="_blank" rel="noopener">cc-skills-golang</a></h3><p class="card-owner">samber/</p><p class="card-problem">Cải thiện hiệu quả và giảm gánh nặng ngữ cảnh cho trợ lý mã hóa AI khi xử lý các tác vụ lập trình chuyên biệt, đặc biệt là trong Golang.</p><p class=card-innov>💡 Phát triển các bộ hướng dẫn (skill) AI agent tái sử dụng, chuyên biệt theo lĩnh vực (Go-specific), được tải theo yêu cầu để tránh làm phình to ngữ cảnh của trợ lý mã hóa.</p><p class=card-why>🔥 Sự kết hợp giữa AI agents, giải quyết vấn đề quản lý ngữ cảnh và tập trung vào Golang đã tạo ra một giải pháp được săn đón trong bối cảnh phát triển AI hiện nay.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">Golang</span></div><div class=topic-row><span class="topic">agent</span><span class="topic">agent-skills</span><span class="topic">ai</span><span class="topic">antigravity</span></div><footer class="card-foot"><span class="stars">★ 1.3k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:90%;background:#4ade80"></div></div><span class="rel-val">9/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="83.1" data-domain="Multimodal" data-search="tencent-hunyuan/hy-world-2.0 xây dựng một mô hình thế giới đa phương thức có khả năng tái tạo, tạo ra và mô phỏng các thế giới 3d một cách hiệu quả. multimodal "><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#a78bfa>🌐 Multimodal</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">83.1</div></header><h3 class="card-title"><a href="https://github.com/Tencent-Hunyuan/HY-World-2.0" target="_blank" rel="noopener">HY-World-2.0</a></h3><p class="card-owner">Tencent-Hunyuan/</p><p class="card-problem">Xây dựng một mô hình thế giới đa phương thức có khả năng tái tạo, tạo ra và mô phỏng các thế giới 3D một cách hiệu quả.</p><p class=card-innov>💡 Giới thiệu HY-World 2.0, một mô hình thế giới đa phương thức tiên tiến được thiết kế để xử lý đồng thời các nhiệm vụ tái tạo, tạo và mô phỏng môi trường 3D.</p><p class=card-why>🔥 Dự án này được chú ý vì giải quyết các thách thức cốt lõi trong việc tạo và mô phỏng thế giới 3D phức tạp, một lĩnh vực quan trọng cho các ứng dụng như thực tế ảo, robot và game.</p><div class=attr-row><span class="attr">real-world</span></div><div class=topic-row><span class="topic">3d</span><span class="topic">ai</span><span class="topic">worldmodel</span></div><footer class="card-foot"><span class="stars">★ 1.1k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:90%;background:#4ade80"></div></div><span class="rel-val">9/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="80.8" data-domain="GenAI" data-search="agricidaniel/claude-obsidian tích hợp ai chatbot claude vào obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung. genai claude api obsidian"><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#e879f9>🔮 GenAI</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">80.8</div></header><h3 class="card-title"><a href="https://github.com/AgriciDaniel/claude-obsidian" target="_blank" rel="noopener">claude-obsidian</a></h3><p class="card-owner">AgriciDaniel/</p><p class="card-problem">Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung.</p><p class=card-innov>💡 Mang khả năng của mô hình ngôn ngữ lớn Claude trực tiếp vào môi trường ghi chú Obsidian, tối ưu hóa quy trình làm việc và tăng cường năng suất cho người dùng.</p><p class=card-why>🔥 Sự kết hợp giữa AI tiên tiến (Claude) và công cụ quản lý kiến thức phổ biến (Obsidian) đáp ứng nhu cầu tăng cường năng suất và tự động hóa trong công việc hàng ngày.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">Claude API</span><span class="tag">Obsidian</span></div><div class=topic-row><span class="topic">ai</span><span class="topic">claude-code</span><span class="topic">claude-code-skill</span><span class="topic">knowledge-management</span></div><footer class="card-foot"><span class="stars">★ 1.8k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:80%;background:#4ade80"></div></div><span class="rel-val">8/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="80.6" data-domain="GenAI" data-search="kyegomez/openmythos simplifying the definition, configuration, and instantiation of large-scale ai models across a wide range of parameter sizes. genai python"><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#e879f9>🔮 GenAI</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">80.6</div></header><h3 class="card-title"><a href="https://github.com/kyegomez/OpenMythos" target="_blank" rel="noopener">OpenMythos</a></h3><p class="card-owner">kyegomez/</p><p class="card-problem">Simplifying the definition, configuration, and instantiation of large-scale AI models across a wide range of parameter sizes.</p><p class=card-innov>💡 Offers a flexible framework with pre-configured AI model variants, enabling easy instantiation of models ranging from 1 billion to 1 trillion parameters with specified configurations.</p><p class=card-why>🔥 Its ability to provide easily configurable and scalable large language models (up to 1 trillion parameters) likely attracts researchers and developers working on advanced AI applications.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">Python</span></div><div class=topic-row><span class="topic">ai</span><span class="topic">anthropic</span><span class="topic">attention</span><span class="topic">claude</span></div><footer class="card-foot"><span class="stars">★ 1.8k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:80%;background:#4ade80"></div></div><span class="rel-val">8/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="77.5" data-domain="Other" data-search="manavarya09/design-extract tự động trích xuất và phân tích toàn diện các thuộc tính thiết kế hình ảnh và cấu trúc layout của một trang web để hiểu ngôn ngữ thiết kế của nó một cách có lập trình. other playwright chromium"><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#94a3b8>⚙ Other</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">77.5</div></header><h3 class="card-title"><a href="https://github.com/Manavarya09/design-extract" target="_blank" rel="noopener">design-extract</a></h3><p class="card-owner">Manavarya09/</p><p class="card-problem">Tự động trích xuất và phân tích toàn diện các thuộc tính thiết kế hình ảnh và cấu trúc layout của một trang web để hiểu ngôn ngữ thiết kế của nó một cách có lập trình.</p><p class=card-innov>💡 Hệ thống hóa việc thu thập dữ liệu bằng cách crawl, trích xuất hơn 25 thuộc tính kiểu tính toán và dữ liệu layout, sau đó xử lý và phân loại chúng để hiểu hệ thống thiết kế của một trang web.</p><p class=card-why>🔥 Nó tự động hóa việc phân tích thiết kế hình ảnh của trang web và cung cấp điểm số về khả năng tiếp cận, điều này cực kỳ hữu ích cho các nhà phát triển và nhà thiết kế.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">Playwright</span><span class="tag">Chromium</span></div><div class=topic-row><span class="topic">accessibility</span><span class="topic">agent-skill</span><span class="topic">ai</span><span class="topic">chrome-extension</span></div><footer class="card-foot"><span class="stars">★ 1.0k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:80%;background:#4ade80"></div></div><span class="rel-val">8/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="73.0" data-domain="Other" data-search="dreddnafious/thereisnospoon software engineers struggle to understand and reason about machine learning systems with the same rigor they apply to traditional software. other "><div class="card-accent" style="background:linear-gradient(90deg,#4ade8044,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#94a3b8>⚙ Other</span></div><div class="score-chip" style="border-color:#4ade80;color:#4ade80">73.0</div></header><h3 class="card-title"><a href="https://github.com/dreddnafious/thereisnospoon" target="_blank" rel="noopener">thereisnospoon</a></h3><p class="card-owner">dreddnafious/</p><p class="card-problem">Software engineers struggle to understand and reason about machine learning systems with the same rigor they apply to traditional software.</p><p class=card-innov>💡 It presents machine learning concepts from first principles, specifically designed to help software engineers reason about ML systems like they do about software.</p><p class=card-why>🔥 The provided summary does not contain enough information to determine why this repository would be trending.</p><div class=topic-row><span class="topic">deep-learning</span><span class="topic">engineering</span><span class="topic">fundamentals</span><span class="topic">machine-learning</span></div><footer class="card-foot"><span class="stars">★ 1.1k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:70%;background:#4ade80"></div></div><span class="rel-val">7/10</span></div></footer></article>
+<article class="card" data-cat="Trending AI" data-score="66.3" data-domain="Other" data-search="coderluii/holyclaude đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (cloudcli, xvfb) bên trong một container docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ. other docker shell scripting s6-overlay xvfb cloudcli git"><div class="card-accent" style="background:linear-gradient(90deg,#fbbf2444,transparent)"></div><header class="card-head"><div class="card-left"><span class="cat-badge trend">Trending AI</span><span class=domain-badge style=color:#94a3b8>⚙ Other</span></div><div class="score-chip" style="border-color:#fbbf24;color:#fbbf24">66.3</div></header><h3 class="card-title"><a href="https://github.com/CoderLuii/HolyClaude" target="_blank" rel="noopener">HolyClaude</a></h3><p class="card-owner">CoderLuii/</p><p class="card-problem">Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ.</p><p class=card-innov>💡 Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.</p><p class=card-why>🔥 Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.</p><div class=attr-row><span class="attr">real-world</span></div><div class=tag-row><span class="tag">Docker</span><span class="tag">shell scripting</span><span class="tag">s6-overlay</span><span class="tag">Xvfb</span><span class="tag">CloudCLI</span><span class="tag">git</span></div><div class=topic-row><span class="topic">ai</span><span class="topic">ai-coding</span><span class="topic">anthropic</span><span class="topic">claude</span></div><footer class="card-foot"><span class="stars">★ 2.0k</span><div class="rel-bar"><span class="rel-lbl">rel</span><div class="rel-track"><div class="rel-fill" style="width:50%;background:#fbbf24"></div></div><span class="rel-val">5/10</span></div></footer></article></div>
 </div>
 
-<!-- Tab: Weekly -->
-<div class="tab-panel" id="tab-weekly">
-<div class="weekly-layout">
-  <aside class="weekly-sidebar">
-    <p class="sidebar-label">Weeks</p>
-    <div class="week-list" id="week-list"><button class="week-btn active" onclick="loadWeek(0)">2026-W16</button><button class="week-btn " onclick="loadWeek(1)">2026-W15</button></div>
-  </aside>
-  <div class="weekly-main" id="weekly-main">
-    <div class="kpi-row" id="kpi-row"><div class="kpi-card"><div class="kpi-val" style="color:#38bdf8">12</div><div class="kpi-lbl">Repos</div><span class="kpi-delta up">+12</span></div><div class="kpi-card"><div class="kpi-val" style="color:#4ade80">8.2</div><div class="kpi-lbl">Avg score</div><span class="kpi-delta up">+8.2</span></div><div class="kpi-card"><div class="kpi-val" style="color:#a78bfa">0</div><div class="kpi-lbl">XAI</div><span class="kpi-delta flat">0</span></div><div class="kpi-card"><div class="kpi-val" style="color:#f472b6">12</div><div class="kpi-lbl">Trending</div><span class="kpi-delta up">+12</span></div></div>
-    <div class="weekly-body">
-      <section class="analysis-section" id="analysis-section">
-        <h2 class="section-title">Analysis</h2>
-        <div class="analysis-prose" id="analysis-prose"><h2 class="md-h2">🔭 Bức tranh tuần này</h2>
+<div class="tab-panel" id="tab-weekly"><div class="weekly-wrap"><div class="weekly-sidebar"><p class="sidebar-lbl">History</p><div id="week-list"><button class="week-btn active" onclick="loadWeek(0)">2026-W16</button><button class="week-btn " onclick="loadWeek(1)">2026-W15</button></div></div><div class="weekly-main"><div class="kpi-row" id="kpi-row"><div class="kpi-card"><div class="kpi-icon">📦</div><div class="kpi-val" style="color:#38bdf8">12</div><div class="kpi-lbl">Total repos</div><span class="kpi-delta up">+12</span></div><div class="kpi-card"><div class="kpi-icon">📊</div><div class="kpi-val" style="color:#4ade80">8.2</div><div class="kpi-lbl">Avg relevance</div><span class="kpi-delta up">+8.2</span></div><div class="kpi-card"><div class="kpi-icon">🔍</div><div class="kpi-val" style="color:#a78bfa">0</div><div class="kpi-lbl">XAI</div><span class="kpi-delta flat">0</span></div><div class="kpi-card"><div class="kpi-icon">🔥</div><div class="kpi-val" style="color:#f472b6">12</div><div class="kpi-lbl">Trending AI</div><span class="kpi-delta up">+12</span></div></div><div class="weekly-body"><div class="analysis-col"><div class="analysis-card"><div class="analysis-prose" id="analysis-prose"><h2 class="md-h2">🔭 Bức tranh tuần này</h2>
 <p class="md-p">Tuần 2026-W16 chứng kiến sự xuất hiện của các dự án AI đột phá, với tổng cộng 12 repos mới được thêm vào, phản ánh sự phát triển nhanh chóng của lĩnh vực trí tuệ nhân tạo. Các dự án này tập trung vào việc giải quyết các vấn đề quan trọng như giảm chi phí và độ trễ trong tương tác với mô hình ngôn ngữ lớn, cũng như cải thiện khả năng truy xuất thông tin hiệu quả.</p>
 <h2 class="md-h2">📈 So với tuần trước</h2>
 <p class="md-p">So với tuần trước, chúng ta thấy sự tăng trưởng đáng kể với 12 repos mới, trong khi tuần trước không có bất kỳ repos nào. Điều này cho thấy sự quan tâm và đầu tư ngày càng tăng vào lĩnh vực AI. Sự tăng trưởng này cũng phản ánh sự phát triển nhanh chóng của công nghệ AI và nhu cầu về các giải pháp sáng tạo để giải quyết các vấn đề thực tế.</p>
@@ -586,77 +284,8 @@ button{font-family:var(--font-sans);cursor:pointer}
 <h2 class="md-h2">💡 Repo đáng chú ý</h2>
 <p class="md-p">Một trong những repo đáng chú ý tuần này là <a href="https://github.com/MemPalace/mempalace" target="_blank" rel="noopener">mempalace</a>, với hơn 47.000 sao trên GitHub. Dự án này tập trung vào việc giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài cho hệ thống AI/LLM. Việc sử dụng phương pháp lai kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.</p>
 <h2 class="md-h2">🔮 Dự đoán tuần tới</h2>
-<p class="md-p">Dựa trên xu hướng hiện tại, dự kiến tuần tới sẽ tiếp tục chứng kiến sự tăng trưởng của các dự án AI, đặc biệt là trong lĩnh vực GenAI và NLP. Ngoài ra, sự xuất hiện của các phương pháp XAI sẽ là một trong những điểm sáng của tuần tới, khi các nhà phát triển và nghiên cứu viên tiếp tục tìm cách giải quyết thách thức về sự giải thích được của các mô hình AI.</p></div>
-      </section>
-      <aside class="weekly-charts" id="weekly-charts">
-        <div class="chart-card">
-          <h3 class="chart-title">XAI Methods</h3>
-          <div class="bar-list" id="xai-bars"><p class="empty-sm">No data</p></div>
-        </div>
-        <div class="chart-card">
-          <h3 class="chart-title">AI Domains</h3>
-          <div class="bar-list" id="dom-bars"><div class="bar-row"><span class="bar-name">GenAI</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#a78bfa"></div></div><span class="bar-cnt">7</span></div><div class="bar-row"><span class="bar-name">Other</span><div class="bar-track"><div class="bar-fill" style="width:43%;background:#a78bfa"></div></div><span class="bar-cnt">3</span></div><div class="bar-row"><span class="bar-name">Multimodal</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:#a78bfa"></div></div><span class="bar-cnt">1</span></div><div class="bar-row"><span class="bar-name">NLP</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:#a78bfa"></div></div><span class="bar-cnt">1</span></div></div>
-        </div>
-        <div class="chart-card">
-          <h3 class="chart-title">Top Stars</h3>
-          <div class="star-list" id="star-list"><a class="star-item" href="https://github.com/MemPalace/mempalace" target="_blank"><span class="star-name">mempalace</span><span class="star-val">★ 47.8k</span></a><a class="star-item" href="https://github.com/JuliusBrussee/caveman" target="_blank"><span class="star-name">caveman</span><span class="star-val">★ 37.5k</span></a><a class="star-item" href="https://github.com/holaboss-ai/holaOS" target="_blank"><span class="star-name">holaOS</span><span class="star-val">★ 2.9k</span></a><a class="star-item" href="https://github.com/calesthio/OpenMontage" target="_blank"><span class="star-name">OpenMontage</span><span class="star-val">★ 2.6k</span></a><a class="star-item" href="https://github.com/CoderLuii/HolyClaude" target="_blank"><span class="star-name">HolyClaude</span><span class="star-val">★ 2.0k</span></a></div>
-        </div>
-      </aside>
-    </div>
-  </div>
-</div>
-<script>
-const WEEKLY_DATA = [{"week_label": "2026-W16", "data": {"curr": {"total": 12, "domains": [{"count": 7, "domain": "GenAI"}, {"count": 3, "domain": "Other"}, {"count": 1, "domain": "Multimodal"}, {"count": 1, "domain": "NLP"}], "avg_score": 8.2, "cat_split": {"Trending AI": 12}, "top_repos": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/MemPalace/mempalace", "why": "Repo này nổi bật vì đạt được độ chính xác truy xuất thông tin rất cao (trên 96% R@5) trong ngữ cảnh dài, cung cấp giải pháp mạnh mẽ và hiệu quả cho các hệ thống bộ nhớ AI.", "name": "MemPalace/mempalace", "innov": "Sử dụng phương pháp lai (hybrid) kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian, cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.", "score": 95.0, "stars": 47758, "domain": "NLP", "methods": [], "problem": "Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/Windy3f3f3f3f/how-claude-code-works", "why": "AI lập trình Agent là một công nghệ đang bùng nổ, và có nhu cầu lớn trong việc tìm hiểu cách các hệ thống thành công nhất hoạt động để ứng dụng hoặc phát triển thêm.", "name": "Windy3f3f3f3f/how-claude-code-works", "innov": "Cung cấp một phân tích sâu sắc và dễ tiếp cận về kiến trúc nội bộ phức tạp của một AI lập trình Agent hàng đầu.", "score": 86.0, "stars": 1920, "domain": "GenAI", "methods": [], "problem": "Hiểu và phân tích kiến trúc mã nguồn của các AI lập trình Agent hàng đầu, đặc biệt là Claude."}], "top_stars": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/MemPalace/mempalace", "why": "Repo này nổi bật vì đạt được độ chính xác truy xuất thông tin rất cao (trên 96% R@5) trong ngữ cảnh dài, cung cấp giải pháp mạnh mẽ và hiệu quả cho các hệ thống bộ nhớ AI.", "name": "MemPalace/mempalace", "innov": "Sử dụng phương pháp lai (hybrid) kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian, cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.", "score": 95.0, "stars": 47758, "domain": "NLP", "methods": [], "problem": "Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 5, "url": "https://github.com/CoderLuii/HolyClaude", "why": "Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.", "name": "CoderLuii/HolyClaude", "innov": "Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.", "score": 66.3, "stars": 2016, "domain": "Other", "methods": [], "problem": "Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ."}], "xai_methods": []}, "prev": {"total": 0, "domains": [], "avg_score": 0, "cat_split": {}, "top_repos": [], "top_stars": [], "xai_methods": []}}, "groq_analysis": "## 🔭 Bức tranh tuần này\nTuần 2026-W16 chứng kiến sự xuất hiện của các dự án AI đột phá, với tổng cộng 12 repos mới được thêm vào, phản ánh sự phát triển nhanh chóng của lĩnh vực trí tuệ nhân tạo. Các dự án này tập trung vào việc giải quyết các vấn đề quan trọng như giảm chi phí và độ trễ trong tương tác với mô hình ngôn ngữ lớn, cũng như cải thiện khả năng truy xuất thông tin hiệu quả.\n\n## 📈 So với tuần trước\nSo với tuần trước, chúng ta thấy sự tăng trưởng đáng kể với 12 repos mới, trong khi tuần trước không có bất kỳ repos nào. Điều này cho thấy sự quan tâm và đầu tư ngày càng tăng vào lĩnh vực AI. Sự tăng trưởng này cũng phản ánh sự phát triển nhanh chóng của công nghệ AI và nhu cầu về các giải pháp sáng tạo để giải quyết các vấn đề thực tế.\n\n## 🔬 Xu hướng XAI\nTuy nhiên, tuần này không thấy sự xuất hiện của bất kỳ phương pháp XAI (Explainable AI) nào. Điều này cho thấy rằng mặc dù lĩnh vực AI đang phát triển nhanh chóng, nhưng vẫn còn nhiều thách thức trong việc tạo ra các mô hình AI có thể giải thích được. Việc phát triển các phương pháp XAI sẽ là một trong những ưu tiên hàng đầu trong tương lai để đảm bảo sự tin cậy và an toàn của các hệ thống AI.\n\n## 🌐 Xu hướng AI tổng thể\nVề xu hướng AI tổng thể, tuần này chứng kiến sự dẫn đầu của các dự án thuộc lĩnh vực GenAI (7 dự án), theo sau là các dự án thuộc lĩnh vực Other (3 dự án), Multimodal (1 dự án) và NLP (1 dự án). Điều này cho thấy sự quan tâm ngày càng tăng vào việc phát triển các mô hình AI có khả năng sinh ra nội dung mới và sáng tạo.\n\n## 💡 Repo đáng chú ý\nMột trong những repo đáng chú ý tuần này là [mempalace](https://github.com/MemPalace/mempalace), với hơn 47.000 sao trên GitHub. Dự án này tập trung vào việc giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài cho hệ thống AI/LLM. Việc sử dụng phương pháp lai kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.\n\n## 🔮 Dự đoán tuần tới\nDựa trên xu hướng hiện tại, dự kiến tuần tới sẽ tiếp tục chứng kiến sự tăng trưởng của các dự án AI, đặc biệt là trong lĩnh vực GenAI và NLP. Ngoài ra, sự xuất hiện của các phương pháp XAI sẽ là một trong những điểm sáng của tuần tới, khi các nhà phát triển và nghiên cứu viên tiếp tục tìm cách giải quyết thách thức về sự giải thích được của các mô hình AI."}, {"week_label": "2026-W15", "data": {"curr": {"total": 5, "domains": [{"count": 4, "domain": "GenAI"}, {"count": 1, "domain": "Other"}], "avg_score": 8.0, "cat_split": {"Trending AI": 5}, "top_repos": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 8, "url": "https://github.com/AgriciDaniel/claude-obsidian", "why": "Sự kết hợp giữa AI tiên tiến (Claude) và công cụ quản lý kiến thức phổ biến (Obsidian) đáp ứng nhu cầu tăng cường năng suất và tự động hóa trong công việc hàng ngày.", "name": "AgriciDaniel/claude-obsidian", "innov": "Mang khả năng của mô hình ngôn ngữ lớn Claude trực tiếp vào môi trường ghi chú Obsidian, tối ưu hóa quy trình làm việc và tăng cường năng suất cho người dùng.", "score": 80.8, "stars": 1840, "domain": "GenAI", "methods": [], "problem": "Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung."}, {"cat": "Trending AI", "rel": 5, "url": "https://github.com/CoderLuii/HolyClaude", "why": "Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.", "name": "CoderLuii/HolyClaude", "innov": "Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.", "score": 66.3, "stars": 2016, "domain": "Other", "methods": [], "problem": "Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ."}], "top_stars": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 5, "url": "https://github.com/CoderLuii/HolyClaude", "why": "Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.", "name": "CoderLuii/HolyClaude", "innov": "Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.", "score": 66.3, "stars": 2016, "domain": "Other", "methods": [], "problem": "Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ."}, {"cat": "Trending AI", "rel": 8, "url": "https://github.com/AgriciDaniel/claude-obsidian", "why": "Sự kết hợp giữa AI tiên tiến (Claude) và công cụ quản lý kiến thức phổ biến (Obsidian) đáp ứng nhu cầu tăng cường năng suất và tự động hóa trong công việc hàng ngày.", "name": "AgriciDaniel/claude-obsidian", "innov": "Mang khả năng của mô hình ngôn ngữ lớn Claude trực tiếp vào môi trường ghi chú Obsidian, tối ưu hóa quy trình làm việc và tăng cường năng suất cho người dùng.", "score": 80.8, "stars": 1840, "domain": "GenAI", "methods": [], "problem": "Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung."}], "xai_methods": []}, "prev": {"total": 0, "domains": [], "avg_score": 0, "cat_split": {}, "top_repos": [], "top_stars": [], "xai_methods": []}}, "groq_analysis": "## 🔭 Bức tranh tuần này\nTuần này chứng kiến sự xuất hiện của nhiều dự án AI thú vị, với sự tập trung vào việc cải thiện hiệu suất và tính ứng dụng của các mô hình ngôn ngữ lớn. Các dự án như caveman và holaOS đang mang đến những giải pháp sáng tạo cho các vấn đề lâu dài trong lĩnh vực AI. Tổng quan, tuần này đánh dấu một bước tiến quan trọng trong việc phát triển và ứng dụng AI.\n\n## 📈 So với tuần trước\nSự tăng trưởng đáng kể trong số lượng repos và điểm số trung bình cho thấy sự quan tâm ngày càng tăng của cộng đồng đối với việc phát triển và cải tiến các dự án AI. Việc không có dự án XAI nào nổi bật trong tuần này cho thấy cộng đồng đang tập trung vào việc giải quyết các vấn đề cơ bản của AI trước khi chuyển sang các khía cạnh như giải thích và minh bạch. Sự thay đổi này phản ánh sự trưởng thành của lĩnh vực AI và nhu cầu về các giải pháp thực tế.\n\n## 🔬 Xu hướng XAI\nMặc dù không có phương pháp XAI nào nổi bật trong tuần này, nhưng sự tập trung vào việc cải thiện hiệu suất và tính ứng dụng của các mô hình ngôn ngữ lớn cho thấy cộng đồng đang quan tâm đến việc giải quyết các vấn đề cơ bản trước. Điều này không có nghĩa là XAI không quan trọng, mà nó cho thấy rằng việc xây dựng một nền tảng vững chắc cho AI là bước đầu tiên trước khi chuyển sang các khía cạnh như giải thích và minh bạch.\n\n## 🌐 Xu hướng AI tổng thể\nGenAI đang dẫn đầu trong số các lĩnh vực AI, với 4 dự án thuộc lĩnh vực này. Điều này cho thấy sự quan tâm ngày càng tăng đối với việc phát triển và ứng dụng các mô hình ngôn ngữ lớn. Sự thiếu đa dạng trong các lĩnh vực AI khác cho thấy rằng cộng đồng đang tập trung vào việc giải quyết các vấn đề cơ bản của AI trước khi mở rộng sang các lĩnh vực khác.\n\n## 💡 Repo đáng chú ý nhất\nDự án caveman là một trong những dự án đáng chú ý nhất trong tuần này. Với việc cung cấp một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của mô hình ngôn ngữ lớn, caveman có thể giúp tiết kiệm chi phí và giảm độ trễ cho các ứng dụng AI. Điều này không chỉ có lợi cho các nhà phát triển mà còn cho người dùng cuối, những người sẽ được hưởng lợi từ việc cải thiện hiệu suất và tốc độ của các ứng dụng AI.\n\n## 🔮 Dự đoán tuần tới\nDựa trên xu hướng hiện tại, có thể dự đoán rằng tuần tới sẽ chứng kiến sự xuất hiện của nhiều dự án AI mới tập trung vào việc cải thiện hiệu suất và tính ứng dụng của các mô hình ngôn ngữ lớn. Ngoài ra, có thể thấy sự quan tâm ngày càng tăng đối với việc phát triển các dự án XAI, khi cộng đồng bắt đầu chuyển sang các khía cạnh như giải thích và minh bạch sau khi giải quyết các vấn đề cơ bản của AI."}];
-function loadWeek(i) {
-  const d = WEEKLY_DATA[i]; if (!d) return;
-  const curr = d.data.curr || {}, prev = d.data.prev || {};
-  document.querySelectorAll('.week-btn').forEach((b,j) => b.classList.toggle('active', i===j));
-  document.getElementById('analysis-prose').innerHTML = mdHtml(d.groq_analysis || '');
-  renderKpi(curr, prev);
-  renderBars('xai-bars', curr.xai_methods||[], 'method','count','#38bdf8');
-  renderBars('dom-bars',  curr.domains||[],     'domain','count','#a78bfa');
-  renderStars('star-list', curr.top_stars||[]);
-}
-function renderKpi(c,p) {
-  const data = [
-    ['Repos', c.total||0, p.total||0, '#38bdf8'],
-    ['Avg score', c.avg_score||0, p.avg_score||0, '#4ade80'],
-    ['XAI', (c.cat_split||{}).XAI||0, (p.cat_split||{}).XAI||0, '#a78bfa'],
-    ['Trending', (c.cat_split||{})['Trending AI']||0, (p.cat_split||{})['Trending AI']||0, '#f472b6'],
-  ];
-  document.getElementById('kpi-row').innerHTML = data.map(([lbl,cv,pv,col]) => {
-    const d = cv-pv, cls = d>0?'up':d<0?'down':'flat', sign=d>0?'+':'';
-    return `<div class="kpi-card"><div class="kpi-val" style="color:${col}">${cv}</div><div class="kpi-lbl">${lbl}</div><span class="kpi-delta ${cls}">${sign}${d}</span></div>`;
-  }).join('');
-}
-function renderBars(id, items, kn, kc, color) {
-  if (!items.length) { document.getElementById(id).innerHTML='<p class="empty-sm">No data</p>'; return; }
-  const mx = Math.max(...items.map(i=>i[kc]));
-  document.getElementById(id).innerHTML = items.map(i =>
-    `<div class="bar-row"><span class="bar-name">${i[kn]}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(i[kc]/mx*100)}%;background:${color}"></div></div><span class="bar-cnt">${i[kc]}</span></div>`
-  ).join('');
-}
-function renderStars(id, repos) {
-  document.getElementById(id).innerHTML = repos.map(r => {
-    const sf = r.stars>=1000?(r.stars/1000).toFixed(1)+'k':r.stars;
-    return `<a class="star-item" href="${r.url}" target="_blank"><span class="star-name">${r.name.split('/').pop()}</span><span class="star-val">★ ${sf}</span></a>`;
-  }).join('');
-}
-</script></div>
-
-<!-- Tab: Insight -->
-<div class="tab-panel" id="tab-insight">
-<div class="insight-layout">
-  <div class="insight-main">
-    <div class="insight-tabs">
-      <button class="itab active" onclick="switchItab('feed',this)">🎯 Feed</button>
-      <button class="itab" onclick="switchItab('papers',this)">📄 ArXiv</button>
-      <button class="itab" onclick="switchItab('analysis',this)">🤖 Briefing</button>
-    </div>
-    <div class='pattern-bar'><span class='pattern-lbl'>Your profile:</span><span class='pattern-txt'>Người dùng quan tâm đến các dự án trong lĩnh vực GenAI, đặc biệt là những dự án thuộc danh mục Trending AI</span></div>
-    <div class="itab-panel active" id="itab-feed"><div class="feed-grid"><article class="feed-card" data-repo="JuliusBrussee/caveman"><div class="feed-head"><div><a href="https://github.com/JuliusBrussee/caveman" target="_blank" class="feed-name">caveman</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('JuliusBrussee/caveman','https://github.com/JuliusBrussee/caveman',true,this)">👍</button><button class="btn-dislike" onclick="setPref('JuliusBrussee/caveman','https://github.com/JuliusBrussee/caveman',false,this)">👎</button></div></div><p class="feed-problem">Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM).</p><div class="feed-foot"><span class="stars">★ 37.5k</span><span style="color:#4ade80;font-size:.72rem">score 145.0</span></div></article><article class="feed-card" data-repo="holaboss-ai/holaOS"><div class="feed-head"><div><a href="https://github.com/holaboss-ai/holaOS" target="_blank" class="feed-name">holaOS</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('holaboss-ai/holaOS','https://github.com/holaboss-ai/holaOS',true,this)">👍</button><button class="btn-dislike" onclick="setPref('holaboss-ai/holaOS','https://github.com/holaboss-ai/holaOS',false,this)">👎</button></div></div><p class="feed-problem">Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển.</p><div class="feed-foot"><span class="stars">★ 2.9k</span><span style="color:#4ade80;font-size:.72rem">score 138.3</span></div></article><article class="feed-card" data-repo="calesthio/OpenMontage"><div class="feed-head"><div><a href="https://github.com/calesthio/OpenMontage" target="_blank" class="feed-name">OpenMontage</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('calesthio/OpenMontage','https://github.com/calesthio/OpenMontage',true,this)">👍</button><button class="btn-dislike" onclick="setPref('calesthio/OpenMontage','https://github.com/calesthio/OpenMontage',false,this)">👎</button></div></div><p class="feed-problem">Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản.</p><div class="feed-foot"><span class="stars">★ 2.6k</span><span style="color:#4ade80;font-size:.72rem">score 137.7</span></div></article><article class="feed-card" data-repo="Windy3f3f3f3f/how-claude-code-works"><div class="feed-head"><div><a href="https://github.com/Windy3f3f3f3f/how-claude-code-works" target="_blank" class="feed-name">how-claude-code-works</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('Windy3f3f3f3f/how-claude-code-works','https://github.com/Windy3f3f3f3f/how-claude-code-works',true,this)">👍</button><button class="btn-dislike" onclick="setPref('Windy3f3f3f3f/how-claude-code-works','https://github.com/Windy3f3f3f3f/how-claude-code-works',false,this)">👎</button></div></div><p class="feed-problem">Hiểu và phân tích kiến trúc mã nguồn của các AI lập trình Agent hàng đầu, đặc biệt là Claude.</p><div class="feed-foot"><span class="stars">★ 1.9k</span><span style="color:#4ade80;font-size:.72rem">score 136.0</span></div></article><article class="feed-card" data-repo="samber/cc-skills-golang"><div class="feed-head"><div><a href="https://github.com/samber/cc-skills-golang" target="_blank" class="feed-name">cc-skills-golang</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('samber/cc-skills-golang','https://github.com/samber/cc-skills-golang',true,this)">👍</button><button class="btn-dislike" onclick="setPref('samber/cc-skills-golang','https://github.com/samber/cc-skills-golang',false,this)">👎</button></div></div><p class="feed-problem">Cải thiện hiệu quả và giảm gánh nặng ngữ cảnh cho trợ lý mã hóa AI khi xử lý các tác vụ lập trình chuyên biệt, đặc biệt là trong Golang.</p><div class="feed-foot"><span class="stars">★ 1.3k</span><span style="color:#4ade80;font-size:.72rem">score 133.8</span></div></article><article class="feed-card" data-repo="AgriciDaniel/claude-obsidian"><div class="feed-head"><div><a href="https://github.com/AgriciDaniel/claude-obsidian" target="_blank" class="feed-name">claude-obsidian</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('AgriciDaniel/claude-obsidian','https://github.com/AgriciDaniel/claude-obsidian',true,this)">👍</button><button class="btn-dislike" onclick="setPref('AgriciDaniel/claude-obsidian','https://github.com/AgriciDaniel/claude-obsidian',false,this)">👎</button></div></div><p class="feed-problem">Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung.</p><div class="feed-foot"><span class="stars">★ 1.8k</span><span style="color:#4ade80;font-size:.72rem">score 130.8</span></div></article><article class="feed-card" data-repo="kyegomez/OpenMythos"><div class="feed-head"><div><a href="https://github.com/kyegomez/OpenMythos" target="_blank" class="feed-name">OpenMythos</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('kyegomez/OpenMythos','https://github.com/kyegomez/OpenMythos',true,this)">👍</button><button class="btn-dislike" onclick="setPref('kyegomez/OpenMythos','https://github.com/kyegomez/OpenMythos',false,this)">👎</button></div></div><p class="feed-problem">Simplifying the definition, configuration, and instantiation of large-scale AI models across a wide range of parameter sizes.</p><div class="feed-foot"><span class="stars">★ 1.8k</span><span style="color:#4ade80;font-size:.72rem">score 130.6</span></div></article><article class="feed-card" data-repo="MemPalace/mempalace"><div class="feed-head"><div><a href="https://github.com/MemPalace/mempalace" target="_blank" class="feed-name">mempalace</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('MemPalace/mempalace','https://github.com/MemPalace/mempalace',true,this)">👍</button><button class="btn-dislike" onclick="setPref('MemPalace/mempalace','https://github.com/MemPalace/mempalace',false,this)">👎</button></div></div><p class="feed-problem">Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM.</p><div class="feed-foot"><span class="stars">★ 47.8k</span><span style="color:#4ade80;font-size:.72rem">score 115.0</span></div></article><article class="feed-card" data-repo="Tencent-Hunyuan/HY-World-2.0"><div class="feed-head"><div><a href="https://github.com/Tencent-Hunyuan/HY-World-2.0" target="_blank" class="feed-name">HY-World-2.0</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('Tencent-Hunyuan/HY-World-2.0','https://github.com/Tencent-Hunyuan/HY-World-2.0',true,this)">👍</button><button class="btn-dislike" onclick="setPref('Tencent-Hunyuan/HY-World-2.0','https://github.com/Tencent-Hunyuan/HY-World-2.0',false,this)">👎</button></div></div><p class="feed-problem">Xây dựng một mô hình thế giới đa phương thức có khả năng tái tạo, tạo ra và mô phỏng các thế giới 3D một cách hiệu quả.</p><div class="feed-foot"><span class="stars">★ 1.1k</span><span style="color:#4ade80;font-size:.72rem">score 103.1</span></div></article><article class="feed-card" data-repo="Manavarya09/design-extract"><div class="feed-head"><div><a href="https://github.com/Manavarya09/design-extract" target="_blank" class="feed-name">design-extract</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" onclick="setPref('Manavarya09/design-extract','https://github.com/Manavarya09/design-extract',true,this)">👍</button><button class="btn-dislike" onclick="setPref('Manavarya09/design-extract','https://github.com/Manavarya09/design-extract',false,this)">👎</button></div></div><p class="feed-problem">Tự động trích xuất và phân tích toàn diện các thuộc tính thiết kế hình ảnh và cấu trúc layout của một trang web để hiểu ngôn ngữ thiết kế của nó một cách có lập trình.</p><div class="feed-foot"><span class="stars">★ 1.0k</span><span style="color:#4ade80;font-size:.72rem">score 97.5</span></div></article></div></div>
-    <div class="itab-panel" id="itab-papers"><div class="papers-list"><article class="paper-card"><a href="https://arxiv.org/abs/2604.18389v1" target="_blank" class="paper-title">Understanding the Prompt Sensitivity</a><p class="paper-meta">Yang Liu, Chenhui Chu · 2026-04-20</p><p class="paper-abstract">Prompt sensitivity, which refers to how strongly the output of a large language model (LLM) depends on the exact wording of its input prompt, raises concerns among users about the LLM's stability and …</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18490v1" target="_blank" class="paper-title">LQM: Linguistically Motivated Multidimensional Quality Metrics for Machine Translation</a><p class="paper-meta">Samar M. Magdy, Fakhraddin Alwajih, Abdellah El Mekki · 2026-04-20</p><p class="paper-abstract">Existing MT evaluation frameworks, including automatic metrics and human evaluation schemes such as Multidimensional Quality Metrics (MQM), are largely language-agnostic. However, they often fail to c…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18478v1" target="_blank" class="paper-title">WorldDB: A Vector Graph-of-Worlds Memory Engine with Ontology-Aware Write-Time Reconciliation</a><p class="paper-meta">Harish Santhanalakshmi Ganesan · 2026-04-20</p><p class="paper-abstract">Persistent memory is the bottleneck separating stateless chatbots from long-running agentic systems. Retrieval-augmented generation (RAG) over flat vector stores fragments facts into chunks, loses cro…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18395v1" target="_blank" class="paper-title">Capturing Monetarily Exploitable Vulnerability in Smart Contracts via Auditor Knowledge-Learning Fuzzing</a><p class="paper-meta">Bowen Cai, Weiheng Bai, Hangyun Tang · 2026-04-20</p><p class="paper-abstract">Smart contracts extended blockchain functionality beyond simple transactions, powering complex applications like decentralized finance (DeFi). However, this complexity introduces serious security chal…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18423v1" target="_blank" class="paper-title">BhashaSutra: A Task-Centric Unified Survey of Indian NLP Datasets, Corpora, and Resources</a><p class="paper-meta">Raghvendra Kumar, Devankar Raj, Sriparna Saha · 2026-04-20</p><p class="paper-abstract">India's linguistic landscape, spanning 22 scheduled languages and hundreds of marginalized dialects, has driven rapid growth in NLP datasets, benchmarks, and pretrained models. However, no dedicated s…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18248v1" target="_blank" class="paper-title">Beyond Pattern Matching: Seven Cross-Domain Techniques for Prompt Injection Detection</a><p class="paper-meta">Thamilvendhan Munirathinam · 2026-04-20</p><p class="paper-abstract">Current open-source prompt-injection detectors converge on two architectural choices: regular-expression pattern matching and fine-tuned transformer classifiers. Both share failure modes that recent w…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18508v1" target="_blank" class="paper-title">Document-as-Image Representations Fall Short for Scientific Retrieval</a><p class="paper-meta">Ghazal Khalighinejad, Raghuveer Thirukovalluru, Alexander H. Oh · 2026-04-20</p><p class="paper-abstract">Many recent document embedding models are trained on document-as-image representations, embedding rendered pages as images rather than the underlying source. Meanwhile, existing benchmarks for scienti…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18429v1" target="_blank" class="paper-title">Revisiting Change VQA in Remote Sensing with Structured and Native Multimodal Qwen Models</a><p class="paper-meta">Yakoub Bazi, Mohamad M. Al Rahhal, Mansour Zuair · 2026-04-20</p><p class="paper-abstract">Change visual question answering (Change VQA) addresses the problem of answering natural-language questions about semantic changes between bi-temporal remote sensing (RS) images. Although vision-langu…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18454v1" target="_blank" class="paper-title">Geometric Trajectory Optimization for TRACON Arrivals: An NLP Approach with ATC Vectoring Maneuver Modeling</a><p class="paper-meta">Yutian Pang, Daniel Delahaye, John-Paul Clarke · 2026-04-20</p><p class="paper-abstract">Terminal airspace congestion remains a major bottleneck in the global air traffic network. Although the Aircraft Sequencing and Scheduling Problem (ASSP) has been widely studied, many methods rely on …</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18573v1" target="_blank" class="paper-title">T-REN: Learning Text-Aligned Region Tokens Improves Dense Vision-Language Alignment and Scalability</a><p class="paper-meta">Savya Khosla, Sethuraman T, Aryan Chadha · 2026-04-20</p><p class="paper-abstract">Despite recent progress, vision-language encoders struggle with two core limitations: (1) weak alignment between language and dense vision features, which hurts tasks like open-vocabulary semantic seg…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18584v1" target="_blank" class="paper-title">MathNet: a Global Multimodal Benchmark for Mathematical Reasoning and Retrieval</a><p class="paper-meta">Shaden Alshammari, Kevin Wen, Abrar Zainal · 2026-04-20</p><p class="paper-abstract">Mathematical problem solving remains a challenging test of reasoning for large language and multimodal models, yet existing benchmarks are limited in size, language coverage, and task diversity. We in…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18364v1" target="_blank" class="paper-title">Training and Agentic Inference Strategies for LLM-based Manim Animation Generation</a><p class="paper-meta">Ravidu Suien Rammuni Silva, Ahmad Lotfi, Isibor Kennedy Ihianle · 2026-04-20</p><p class="paper-abstract">Generating programmatic animation using libraries such as Manim presents unique challenges for Large Language Models (LLMs), requiring spatial reasoning, temporal sequencing, and familiarity with doma…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18320v1" target="_blank" class="paper-title">EVE: Verifiable Self-Evolution of MLLMs via Executable Visual Transformations</a><p class="paper-meta">Yongrui Heng, Chaoya Jiang, Han Yang · 2026-04-20</p><p class="paper-abstract">Self-evolution of multimodal large language models (MLLMs) remains a critical challenge: pseudo-label-based methods suffer from progressive quality degradation as model predictions drift, while templa…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18287v1" target="_blank" class="paper-title">Constraining the trend of the $N = 50$ shell gap towards $^{100}$Sn with the masses of $^{96-98}$Cd</a><p class="paper-meta">D. Lange, D. Atanasov, M. Au · 2026-04-20</p><p class="paper-abstract">We present the first determination of the $N = 50$ empirical shell gap at $Z = 48$ by precise mass measurements of the neutron-deficient cadmium isotopes $^{96-98}$Cd with the ISOLTRAP mass spectromet…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18575v1" target="_blank" class="paper-title">ReCap: Lightweight Referential Grounding for Coherent Story Visualization</a><p class="paper-meta">Aditya Arora, Akshita Gupta, Pau Rodriguez · 2026-04-20</p><p class="paper-abstract">Story Visualization aims to generate a sequence of images that faithfully depicts a textual narrative that preserve character identity, spatial configuration, and stylistic coherence as the narratives…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18570v1" target="_blank" class="paper-title">A multimodal and temporal foundation model for virtual patient representations at healthcare system scale</a><p class="paper-meta">Andrew Zhang, Tong Ding, Sophia J. Wagner · 2026-04-20</p><p class="paper-abstract">Modern medicine generates vast multimodal data across siloed systems, yet no existing model integrates the full breadth and temporal depth of the clinical record into a unified patient representation.…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18460v1" target="_blank" class="paper-title">Learning Invariant Modality Representation for Robust Multimodal Learning from a Causal Inference Perspective</a><p class="paper-meta">Sijie Mai, Shiqin Han · 2026-04-20</p><p class="paper-abstract">Multimodal affective computing aims to predict humans' sentiment, emotion, intention, and opinion using language, acoustic, and visual modalities. However, current models often learn spurious correlat…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18191v1" target="_blank" class="paper-title">Implementing CPSLint: A Data Validation and Sanitisation Tool for Industrial Cyber-Physical Systems</a><p class="paper-meta">Uraz Odyurt, Ömer Sayilir, Mariëlle Stoelinga · 2026-04-20</p><p class="paper-abstract">Raw datasets are often too large and unstructured to work with directly, and require a data preparation phase. The domain of industrial Cyber-Physical Systems (CPSs) is no exception, as raw data typic…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18579v1" target="_blank" class="paper-title">The T16 Planet Hunt: 10,000 New Planet Candidates from TESS Cycle 1 and the Confirmation of a Hot Jupiter Around TIC 183374187</a><p class="paper-meta">Joshua T. Roth, Joel D. Hartman, Gáspár Á. Bakos · 2026-04-20</p><p class="paper-abstract">The T16 project has produced a uniformly detrended and systematics-corrected set of 83,717,159 TESS Cycle 1 full-frame image light curves for stars observed by TESS in its primary mission down to T=16…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18572v1" target="_blank" class="paper-title">Back into Plato's Cave: Examining Cross-modal Representational Convergence at Scale</a><p class="paper-meta">A. Sophia Koepke, Daniil Zverev, Shiry Ginosar · 2026-04-20</p><p class="paper-abstract">The Platonic Representation Hypothesis suggests that neural networks trained on different modalities (e.g., text and images) align and eventually converge toward the same representation of reality. If…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18466v1" target="_blank" class="paper-title">pyTRAIN -- a modern TRAIN implementation</a><p class="paper-meta">Michi Hostettler, Xavier Buffat, Tobias Persson · 2026-04-20</p><p class="paper-abstract">The TRAIN code, developed in 1995 as a post-processor for second-order transport maps from MAD, has been used extensively at the LEP and the LHC to study self-consistent closed orbits, tunes and chrom…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18576v1" target="_blank" class="paper-title">Agentic Forecasting using Sequential Bayesian Updating of Linguistic Beliefs</a><p class="paper-meta">Kevin Murphy · 2026-04-20</p><p class="paper-abstract">We present BLF (Bayesian Linguistic Forecaster), an agentic system for binary forecasting that achieves state-of-the-art performance on the ForecastBench benchmark. The system is built on three ideas.…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18574v1" target="_blank" class="paper-title">When Can LLMs Learn to Reason with Weak Supervision?</a><p class="paper-meta">Salman Rahman, Jingyan Shen, Anna Mordvina · 2026-04-20</p><p class="paper-abstract">Large language models have achieved significant reasoning improvements through reinforcement learning with verifiable rewards (RLVR). Yet as model capabilities grow, constructing high-quality reward s…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18538v1" target="_blank" class="paper-title">Fast and Forgettable: A Controlled Study of Novices' Performance, Learning, Workload, and Emotion in AI-Assisted and Human Pair Programming Paradigms</a><p class="paper-meta">Nicholas Gardella, James Prather, Juho Leinonen · 2026-04-20</p><p class="paper-abstract">Code-generating Artificial Intelligence has gained popularity within both professional and educational programming settings over the past several years. While research and pedagogy are beginning to co…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18413v1" target="_blank" class="paper-title">TypeScript Repository Indexing for Code Agent Retrieval</a><p class="paper-meta">Junsong Pu, Yichen Li, Zhuangbin Chen · 2026-04-20</p><p class="paper-abstract">Graph-based code indexing can improve context retrieval for LLM-based code agents by preserving call chains and dependency relationships that keyword search and similarity retrieval often miss. ABCode…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18401v1" target="_blank" class="paper-title">StepPO: Step-Aligned Policy Optimization for Agentic Reinforcement Learning</a><p class="paper-meta">Daoyu Wang, Qingchuan Li, Mingyue Cheng · 2026-04-20</p><p class="paper-abstract">General agents have given rise to phenomenal applications such as OpenClaw and Claude Code. As these agent systems (a.k.a. Harnesses) strive for bolder goals, they demand increasingly stronger agentic…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18578v1" target="_blank" class="paper-title">Bounded Ratio Reinforcement Learning</a><p class="paper-meta">Yunke Ao, Le Chen, Bruce D. Lee · 2026-04-20</p><p class="paper-abstract">Proximal Policy Optimization (PPO) has become the predominant algorithm for on-policy reinforcement learning due to its scalability and empirical robustness across domains. However, there is a signifi…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18111v1" target="_blank" class="paper-title">Smokescreen: A Python package for data vector blinding and encryption in cosmological analyses</a><p class="paper-meta">Arthur Loureiro, Jessica Muir, Jonathan Blazek · 2026-04-20</p><p class="paper-abstract">Smokescreen is an open-source Python library for data-vector concealment (blinding) in cosmological analyses. Data-vector blinding works by applying cosmology-dependent shifts to the observed data vec…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.18566v1" target="_blank" class="paper-title">Benchmarking System Dynamics AI Assistants: Cloud Versus Local LLMs on CLD Extraction and Discussion</a><p class="paper-meta">Terry Leitch · 2026-04-20</p><p class="paper-abstract">We present a systematic evaluation of large language model families -- spanning both proprietary cloud APIs and locally-hosted open-source models -- on two purpose-built benchmarks for System Dynamics…</p></article><article class="paper-card"><a href="https://arxiv.org/abs/2604.17309v1" target="_blank" class="paper-title">Knows: Agent-Native Structured Research Representations</a><p class="paper-meta">Guangsheng Yu, Xu Wang · 2026-04-19</p><p class="paper-abstract">Research artifacts are distributed primarily as reader-oriented documents like PDFs. This creates a bottleneck for increasingly agent-assisted and agent-native research workflows, in which LLM agents …</p></article></div></div>
-    <div class="itab-panel" id="itab-analysis"><div class="analysis-prose"><h2 class="md-h2">👤 Dành riêng cho bạn</h2>
+<p class="md-p">Dựa trên xu hướng hiện tại, dự kiến tuần tới sẽ tiếp tục chứng kiến sự tăng trưởng của các dự án AI, đặc biệt là trong lĩnh vực GenAI và NLP. Ngoài ra, sự xuất hiện của các phương pháp XAI sẽ là một trong những điểm sáng của tuần tới, khi các nhà phát triển và nghiên cứu viên tiếp tục tìm cách giải quyết thách thức về sự giải thích được của các mô hình AI.</p></div></div></div><div class="charts-col"><div class="chart-card"><div class="chart-title">🔬 XAI Methods</div><div id="xai-bars"><p class="empty-sm">No data</p></div></div><div class="chart-card"><div class="chart-title">🌐 AI Domains</div><div id="dom-bars"><div class="bar-row"><span class="bar-name">GenAI</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#a78bfa"></div></div><span class="bar-cnt">7</span></div><div class="bar-row"><span class="bar-name">Other</span><div class="bar-track"><div class="bar-fill" style="width:43%;background:#a78bfa"></div></div><span class="bar-cnt">3</span></div><div class="bar-row"><span class="bar-name">Multimodal</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:#a78bfa"></div></div><span class="bar-cnt">1</span></div><div class="bar-row"><span class="bar-name">NLP</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:#a78bfa"></div></div><span class="bar-cnt">1</span></div></div></div><div class="chart-card"><div class="chart-title">⭐ Top by Stars</div><div id="star-list"><a class="top-repo-row" href="https://github.com/MemPalace/mempalace" target="_blank"><span class="top-repo-rank">#1</span><span class="top-repo-name">mempalace</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 47.8k</span></span></a><a class="top-repo-row" href="https://github.com/JuliusBrussee/caveman" target="_blank"><span class="top-repo-rank">#2</span><span class="top-repo-name">caveman</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 37.5k</span></span></a><a class="top-repo-row" href="https://github.com/holaboss-ai/holaOS" target="_blank"><span class="top-repo-rank">#3</span><span class="top-repo-name">holaOS</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 2.9k</span></span></a><a class="top-repo-row" href="https://github.com/calesthio/OpenMontage" target="_blank"><span class="top-repo-rank">#4</span><span class="top-repo-name">OpenMontage</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 2.6k</span></span></a><a class="top-repo-row" href="https://github.com/CoderLuii/HolyClaude" target="_blank"><span class="top-repo-rank">#5</span><span class="top-repo-name">HolyClaude</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 2.0k</span></span></a></div></div><div class="chart-card"><div class="chart-title">🏆 Top by Score</div><div id="score-list"><a class="top-repo-row" href="https://github.com/JuliusBrussee/caveman" target="_blank"><span class="top-repo-rank">#1</span><span class="top-repo-name">caveman</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 37.5k</span></span></a><a class="top-repo-row" href="https://github.com/MemPalace/mempalace" target="_blank"><span class="top-repo-rank">#2</span><span class="top-repo-name">mempalace</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 47.8k</span></span></a><a class="top-repo-row" href="https://github.com/holaboss-ai/holaOS" target="_blank"><span class="top-repo-rank">#3</span><span class="top-repo-name">holaOS</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 2.9k</span></span></a><a class="top-repo-row" href="https://github.com/calesthio/OpenMontage" target="_blank"><span class="top-repo-rank">#4</span><span class="top-repo-name">OpenMontage</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 2.6k</span></span></a><a class="top-repo-row" href="https://github.com/Windy3f3f3f3f/how-claude-code-works" target="_blank"><span class="top-repo-rank">#5</span><span class="top-repo-name">how-claude-code-works</span><span class="top-repo-meta"><span class="top-repo-cat trend">Trending AI</span><span class="top-repo-stars">★ 1.9k</span></span></a></div></div></div></div></div></div><script>const WEEKLY_DATA=[{"week_label": "2026-W16", "data": {"curr": {"total": 12, "domains": [{"count": 7, "domain": "GenAI"}, {"count": 3, "domain": "Other"}, {"count": 1, "domain": "Multimodal"}, {"count": 1, "domain": "NLP"}], "avg_score": 8.2, "cat_split": {"Trending AI": 12}, "top_repos": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/MemPalace/mempalace", "why": "Repo này nổi bật vì đạt được độ chính xác truy xuất thông tin rất cao (trên 96% R@5) trong ngữ cảnh dài, cung cấp giải pháp mạnh mẽ và hiệu quả cho các hệ thống bộ nhớ AI.", "name": "MemPalace/mempalace", "innov": "Sử dụng phương pháp lai (hybrid) kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian, cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.", "score": 95.0, "stars": 47758, "domain": "NLP", "methods": [], "problem": "Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/Windy3f3f3f3f/how-claude-code-works", "why": "AI lập trình Agent là một công nghệ đang bùng nổ, và có nhu cầu lớn trong việc tìm hiểu cách các hệ thống thành công nhất hoạt động để ứng dụng hoặc phát triển thêm.", "name": "Windy3f3f3f3f/how-claude-code-works", "innov": "Cung cấp một phân tích sâu sắc và dễ tiếp cận về kiến trúc nội bộ phức tạp của một AI lập trình Agent hàng đầu.", "score": 86.0, "stars": 1920, "domain": "GenAI", "methods": [], "problem": "Hiểu và phân tích kiến trúc mã nguồn của các AI lập trình Agent hàng đầu, đặc biệt là Claude."}], "top_stars": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/MemPalace/mempalace", "why": "Repo này nổi bật vì đạt được độ chính xác truy xuất thông tin rất cao (trên 96% R@5) trong ngữ cảnh dài, cung cấp giải pháp mạnh mẽ và hiệu quả cho các hệ thống bộ nhớ AI.", "name": "MemPalace/mempalace", "innov": "Sử dụng phương pháp lai (hybrid) kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian, cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.", "score": 95.0, "stars": 47758, "domain": "NLP", "methods": [], "problem": "Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 5, "url": "https://github.com/CoderLuii/HolyClaude", "why": "Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.", "name": "CoderLuii/HolyClaude", "innov": "Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.", "score": 66.3, "stars": 2016, "domain": "Other", "methods": [], "problem": "Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ."}], "xai_methods": []}, "prev": {"total": 0, "domains": [], "avg_score": 0, "cat_split": {}, "top_repos": [], "top_stars": [], "xai_methods": []}}, "groq_analysis": "## 🔭 Bức tranh tuần này\nTuần 2026-W16 chứng kiến sự xuất hiện của các dự án AI đột phá, với tổng cộng 12 repos mới được thêm vào, phản ánh sự phát triển nhanh chóng của lĩnh vực trí tuệ nhân tạo. Các dự án này tập trung vào việc giải quyết các vấn đề quan trọng như giảm chi phí và độ trễ trong tương tác với mô hình ngôn ngữ lớn, cũng như cải thiện khả năng truy xuất thông tin hiệu quả.\n\n## 📈 So với tuần trước\nSo với tuần trước, chúng ta thấy sự tăng trưởng đáng kể với 12 repos mới, trong khi tuần trước không có bất kỳ repos nào. Điều này cho thấy sự quan tâm và đầu tư ngày càng tăng vào lĩnh vực AI. Sự tăng trưởng này cũng phản ánh sự phát triển nhanh chóng của công nghệ AI và nhu cầu về các giải pháp sáng tạo để giải quyết các vấn đề thực tế.\n\n## 🔬 Xu hướng XAI\nTuy nhiên, tuần này không thấy sự xuất hiện của bất kỳ phương pháp XAI (Explainable AI) nào. Điều này cho thấy rằng mặc dù lĩnh vực AI đang phát triển nhanh chóng, nhưng vẫn còn nhiều thách thức trong việc tạo ra các mô hình AI có thể giải thích được. Việc phát triển các phương pháp XAI sẽ là một trong những ưu tiên hàng đầu trong tương lai để đảm bảo sự tin cậy và an toàn của các hệ thống AI.\n\n## 🌐 Xu hướng AI tổng thể\nVề xu hướng AI tổng thể, tuần này chứng kiến sự dẫn đầu của các dự án thuộc lĩnh vực GenAI (7 dự án), theo sau là các dự án thuộc lĩnh vực Other (3 dự án), Multimodal (1 dự án) và NLP (1 dự án). Điều này cho thấy sự quan tâm ngày càng tăng vào việc phát triển các mô hình AI có khả năng sinh ra nội dung mới và sáng tạo.\n\n## 💡 Repo đáng chú ý\nMột trong những repo đáng chú ý tuần này là [mempalace](https://github.com/MemPalace/mempalace), với hơn 47.000 sao trên GitHub. Dự án này tập trung vào việc giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài cho hệ thống AI/LLM. Việc sử dụng phương pháp lai kết hợp tìm kiếm ngữ nghĩa với các heuristic như tăng cường từ khóa và khoảng cách thời gian cho phép đạt độ chính xác truy xuất cao mà ít phụ thuộc vào LLM.\n\n## 🔮 Dự đoán tuần tới\nDựa trên xu hướng hiện tại, dự kiến tuần tới sẽ tiếp tục chứng kiến sự tăng trưởng của các dự án AI, đặc biệt là trong lĩnh vực GenAI và NLP. Ngoài ra, sự xuất hiện của các phương pháp XAI sẽ là một trong những điểm sáng của tuần tới, khi các nhà phát triển và nghiên cứu viên tiếp tục tìm cách giải quyết thách thức về sự giải thích được của các mô hình AI."}, {"week_label": "2026-W15", "data": {"curr": {"total": 5, "domains": [{"count": 4, "domain": "GenAI"}, {"count": 1, "domain": "Other"}], "avg_score": 8.0, "cat_split": {"Trending AI": 5}, "top_repos": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 8, "url": "https://github.com/AgriciDaniel/claude-obsidian", "why": "Sự kết hợp giữa AI tiên tiến (Claude) và công cụ quản lý kiến thức phổ biến (Obsidian) đáp ứng nhu cầu tăng cường năng suất và tự động hóa trong công việc hàng ngày.", "name": "AgriciDaniel/claude-obsidian", "innov": "Mang khả năng của mô hình ngôn ngữ lớn Claude trực tiếp vào môi trường ghi chú Obsidian, tối ưu hóa quy trình làm việc và tăng cường năng suất cho người dùng.", "score": 80.8, "stars": 1840, "domain": "GenAI", "methods": [], "problem": "Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung."}, {"cat": "Trending AI", "rel": 5, "url": "https://github.com/CoderLuii/HolyClaude", "why": "Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.", "name": "CoderLuii/HolyClaude", "innov": "Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.", "score": 66.3, "stars": 2016, "domain": "Other", "methods": [], "problem": "Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ."}], "top_stars": [{"cat": "Trending AI", "rel": 9, "url": "https://github.com/JuliusBrussee/caveman", "why": "Chi phí cao và nhu cầu tài nguyên lớn của các mô hình ngôn ngữ lớn khiến hiệu quả token trở thành một tối ưu hóa quan trọng và rất được tìm kiếm.", "name": "JuliusBrussee/caveman", "innov": "Một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của LLM, giúp tiết kiệm đáng kể (ví dụ: hơn 80%).", "score": 95.0, "stars": 37464, "domain": "GenAI", "methods": [], "problem": "Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM)."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/holaboss-ai/holaOS", "why": "Các hệ thống tác nhân AI có khả năng làm việc dài hạn và tự cải thiện là xu hướng nổi bật hiện nay trong lĩnh vực AI.", "name": "holaboss-ai/holaOS", "innov": "Tạo ra một môi trường tác nhân (agent environment) cho phép các tác nhân thực hiện công việc dài hạn, duy trì tính liên tục và tự tiến hóa.", "score": 88.3, "stars": 2930, "domain": "GenAI", "methods": [], "problem": "Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển."}, {"cat": "Trending AI", "rel": 9, "url": "https://github.com/calesthio/OpenMontage", "why": "Đây là hệ thống mã nguồn mở và agentic đầu tiên cho sản xuất video, tận dụng sự quan tâm ngày càng tăng đối với tự động hóa tạo nội dung bằng AI.", "name": "calesthio/OpenMontage", "innov": "Hệ thống sản xuất video mã nguồn mở đầu tiên sử dụng kiến trúc agent-first, nơi trợ lý mã hóa AI tự động điều phối toàn bộ quy trình.", "score": 87.7, "stars": 2620, "domain": "GenAI", "methods": [], "problem": "Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản."}, {"cat": "Trending AI", "rel": 5, "url": "https://github.com/CoderLuii/HolyClaude", "why": "Thông tin không đủ trong tóm tắt để xác định lý do kho lưu trữ này thịnh hành.", "name": "CoderLuii/HolyClaude", "innov": "Sử dụng s6-overlay, một hệ thống giám sát tiến trình chuyên biệt được xây dựng cho Docker, để tự động khởi động lại và duy trì sự ổn định cho các ứng dụng bên trong container.", "score": 66.3, "stars": 2016, "domain": "Other", "methods": [], "problem": "Đảm bảo khởi động đáng tin cậy và quản lý tiến trình ổn định cho các ứng dụng (CloudCLI, Xvfb) bên trong một container Docker, xử lý các cấu hình ban đầu, quyền truy cập người dùng và giám sát tiến trình mạnh mẽ."}, {"cat": "Trending AI", "rel": 8, "url": "https://github.com/AgriciDaniel/claude-obsidian", "why": "Sự kết hợp giữa AI tiên tiến (Claude) và công cụ quản lý kiến thức phổ biến (Obsidian) đáp ứng nhu cầu tăng cường năng suất và tự động hóa trong công việc hàng ngày.", "name": "AgriciDaniel/claude-obsidian", "innov": "Mang khả năng của mô hình ngôn ngữ lớn Claude trực tiếp vào môi trường ghi chú Obsidian, tối ưu hóa quy trình làm việc và tăng cường năng suất cho người dùng.", "score": 80.8, "stars": 1840, "domain": "GenAI", "methods": [], "problem": "Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung."}], "xai_methods": []}, "prev": {"total": 0, "domains": [], "avg_score": 0, "cat_split": {}, "top_repos": [], "top_stars": [], "xai_methods": []}}, "groq_analysis": "## 🔭 Bức tranh tuần này\nTuần này chứng kiến sự xuất hiện của nhiều dự án AI thú vị, với sự tập trung vào việc cải thiện hiệu suất và tính ứng dụng của các mô hình ngôn ngữ lớn. Các dự án như caveman và holaOS đang mang đến những giải pháp sáng tạo cho các vấn đề lâu dài trong lĩnh vực AI. Tổng quan, tuần này đánh dấu một bước tiến quan trọng trong việc phát triển và ứng dụng AI.\n\n## 📈 So với tuần trước\nSự tăng trưởng đáng kể trong số lượng repos và điểm số trung bình cho thấy sự quan tâm ngày càng tăng của cộng đồng đối với việc phát triển và cải tiến các dự án AI. Việc không có dự án XAI nào nổi bật trong tuần này cho thấy cộng đồng đang tập trung vào việc giải quyết các vấn đề cơ bản của AI trước khi chuyển sang các khía cạnh như giải thích và minh bạch. Sự thay đổi này phản ánh sự trưởng thành của lĩnh vực AI và nhu cầu về các giải pháp thực tế.\n\n## 🔬 Xu hướng XAI\nMặc dù không có phương pháp XAI nào nổi bật trong tuần này, nhưng sự tập trung vào việc cải thiện hiệu suất và tính ứng dụng của các mô hình ngôn ngữ lớn cho thấy cộng đồng đang quan tâm đến việc giải quyết các vấn đề cơ bản trước. Điều này không có nghĩa là XAI không quan trọng, mà nó cho thấy rằng việc xây dựng một nền tảng vững chắc cho AI là bước đầu tiên trước khi chuyển sang các khía cạnh như giải thích và minh bạch.\n\n## 🌐 Xu hướng AI tổng thể\nGenAI đang dẫn đầu trong số các lĩnh vực AI, với 4 dự án thuộc lĩnh vực này. Điều này cho thấy sự quan tâm ngày càng tăng đối với việc phát triển và ứng dụng các mô hình ngôn ngữ lớn. Sự thiếu đa dạng trong các lĩnh vực AI khác cho thấy rằng cộng đồng đang tập trung vào việc giải quyết các vấn đề cơ bản của AI trước khi mở rộng sang các lĩnh vực khác.\n\n## 💡 Repo đáng chú ý nhất\nDự án caveman là một trong những dự án đáng chú ý nhất trong tuần này. Với việc cung cấp một phương pháp luận để giảm đáng kể số lượng token được sử dụng trong các lời nhắc và phản hồi của mô hình ngôn ngữ lớn, caveman có thể giúp tiết kiệm chi phí và giảm độ trễ cho các ứng dụng AI. Điều này không chỉ có lợi cho các nhà phát triển mà còn cho người dùng cuối, những người sẽ được hưởng lợi từ việc cải thiện hiệu suất và tốc độ của các ứng dụng AI.\n\n## 🔮 Dự đoán tuần tới\nDựa trên xu hướng hiện tại, có thể dự đoán rằng tuần tới sẽ chứng kiến sự xuất hiện của nhiều dự án AI mới tập trung vào việc cải thiện hiệu suất và tính ứng dụng của các mô hình ngôn ngữ lớn. Ngoài ra, có thể thấy sự quan tâm ngày càng tăng đối với việc phát triển các dự án XAI, khi cộng đồng bắt đầu chuyển sang các khía cạnh như giải thích và minh bạch sau khi giải quyết các vấn đề cơ bản của AI."}];function loadWeek(i){const d=WEEKLY_DATA[i];if(!d)return;const curr=d.data.curr||{},prev=d.data.prev||{};document.querySelectorAll(".week-btn").forEach((b,j)=>b.classList.toggle("active",i===j));document.getElementById("analysis-prose").innerHTML=mdHtml(d.groq_analysis||"");renderKpi(curr,prev);renderBars("xai-bars",curr.xai_methods||[],"method","count","#38bdf8");renderBars("dom-bars",curr.domains||[],"domain","count","#a78bfa");renderTopRepos("star-list",curr.top_stars||[]);renderTopRepos("score-list",curr.top_repos||[]);}function renderKpi(c,p){const items=[["📦","Total repos",c.total||0,p.total||0,"#38bdf8"],["📊","Avg relevance",c.avg_score||0,p.avg_score||0,"#4ade80"],["🔍","XAI",(c.cat_split||{}).XAI||0,(p.cat_split||{}).XAI||0,"#a78bfa"],["🔥","Trending AI",(c.cat_split||{})["Trending AI"]||0,(p.cat_split||{})["Trending AI"]||0,"#f472b6"]];document.getElementById("kpi-row").innerHTML=items.map(([ic,lbl,cv,pv,col])=>{const d=cv-pv,cls=d>0?"up":d<0?"dn":"flat",sign=d>0?"+":"";return `<div class="kpi-card"><div class="kpi-icon">${ic}</div><div class="kpi-val" style="color:${col}">${cv}</div><div class="kpi-lbl">${lbl}</div><span class="kpi-delta ${cls}">${sign}${d}</span></div>`;}).join("");}function renderBars(id,items,kn,kc,color){if(!items.length){document.getElementById(id).innerHTML='<p class="empty-sm">No data</p>';return;}const mx=Math.max(...items.map(i=>i[kc]));document.getElementById(id).innerHTML=items.map(i=>`<div class="bar-row"><span class="bar-name">${i[kn]}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(i[kc]/mx*100)}%;background:${color}"></div></div><span class="bar-cnt">${i[kc]}</span></div>`).join("");}function renderTopRepos(id,repos){document.getElementById(id).innerHTML=repos.map((r,i)=>`<a class="top-repo-row" href="${r.url}" target="_blank"><span class="top-repo-rank">#${i+1}</span><span class="top-repo-name">${r.name.split("/").pop()}</span><span class="top-repo-meta"><span class="top-repo-cat ${r.cat==="XAI"?"xai":"trend"}">${r.cat}</span><span class="top-repo-stars">★ ${r.stars>=1000?(r.stars/1000).toFixed(1)+"k":r.stars}</span></span></a>`).join("");}</script></div>
+<div class="tab-panel" id="tab-insight"><div class="insight-wrap"><div class="insight-main"><div class="pref-banner"><div class="pref-banner-icon">🎯</div><div class="pref-banner-body"><p class="pref-summary">Người dùng quan tâm đến các dự án trong lĩnh vực GenAI, đặc biệt là những dự án thuộc danh mục Trending AI</p><div class=tag-row><span class="tag">GenAI</span></div></div><div class="pref-stats"><span>👍 2</span><span>👎 0</span></div></div><div class="insight-tabs"><button class="itab active" onclick="switchItab('feed',this)">🎯 Personal Feed</button><button class="itab" onclick="switchItab('papers',this)">📄 ArXiv (30)</button><button class="itab" onclick="switchItab('analysis',this)">🤖 Weekly Briefing</button></div><div class="itab-panel active" id="itab-feed"><div class="feed-grid"><article class="feed-card" data-repo="JuliusBrussee/caveman"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/JuliusBrussee/caveman" target="_blank" class="feed-name">caveman</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('JuliusBrussee/caveman','https://github.com/JuliusBrussee/caveman',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('JuliusBrussee/caveman','https://github.com/JuliusBrussee/caveman',false,this)">👎</button></div></div><p class=feed-domain style=color:#e879f9>🔮 GenAI</p><p class="feed-problem">Chi phí và độ trễ cao do sử dụng nhiều token trong các tương tác với mô hình ngôn ngữ lớn (LLM).</p><div class="feed-foot"><span class="stars">★ 37.5k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="holaboss-ai/holaOS"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/holaboss-ai/holaOS" target="_blank" class="feed-name">holaOS</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('holaboss-ai/holaOS','https://github.com/holaboss-ai/holaOS',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('holaboss-ai/holaOS','https://github.com/holaboss-ai/holaOS',false,this)">👎</button></div></div><p class=feed-domain style=color:#e879f9>🔮 GenAI</p><p class="feed-problem">Cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ dài hạn, duy trì tính liên tục và tự phát triển.</p><div class="feed-foot"><span class="stars">★ 2.9k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="calesthio/OpenMontage"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/calesthio/OpenMontage" target="_blank" class="feed-name">OpenMontage</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('calesthio/OpenMontage','https://github.com/calesthio/OpenMontage',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('calesthio/OpenMontage','https://github.com/calesthio/OpenMontage',false,this)">👎</button></div></div><p class=feed-domain style=color:#e879f9>🔮 GenAI</p><p class="feed-problem">Tự động hóa và điều phối toàn bộ quy trình sản xuất video từ một lời nhắc đơn giản.</p><div class="feed-foot"><span class="stars">★ 2.6k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="Windy3f3f3f3f/how-claude-code-works"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/Windy3f3f3f3f/how-claude-code-works" target="_blank" class="feed-name">how-claude-code-works</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('Windy3f3f3f3f/how-claude-code-works','https://github.com/Windy3f3f3f3f/how-claude-code-works',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('Windy3f3f3f3f/how-claude-code-works','https://github.com/Windy3f3f3f3f/how-claude-code-works',false,this)">👎</button></div></div><p class=feed-domain style=color:#e879f9>🔮 GenAI</p><p class="feed-problem">Hiểu và phân tích kiến trúc mã nguồn của các AI lập trình Agent hàng đầu, đặc biệt là Claude.</p><div class="feed-foot"><span class="stars">★ 1.9k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="samber/cc-skills-golang"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/samber/cc-skills-golang" target="_blank" class="feed-name">cc-skills-golang</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('samber/cc-skills-golang','https://github.com/samber/cc-skills-golang',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('samber/cc-skills-golang','https://github.com/samber/cc-skills-golang',false,this)">👎</button></div></div><p class=feed-domain style=color:#e879f9>🔮 GenAI</p><p class="feed-problem">Cải thiện hiệu quả và giảm gánh nặng ngữ cảnh cho trợ lý mã hóa AI khi xử lý các tác vụ lập trình chuyên biệt, đặc biệt là trong Golang.</p><div class="feed-foot"><span class="stars">★ 1.3k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="AgriciDaniel/claude-obsidian"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/AgriciDaniel/claude-obsidian" target="_blank" class="feed-name">claude-obsidian</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('AgriciDaniel/claude-obsidian','https://github.com/AgriciDaniel/claude-obsidian',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('AgriciDaniel/claude-obsidian','https://github.com/AgriciDaniel/claude-obsidian',false,this)">👎</button></div></div><p class=feed-domain style=color:#e879f9>🔮 GenAI</p><p class="feed-problem">Tích hợp AI chatbot Claude vào Obsidian để hỗ trợ người dùng trong việc ghi chú, quản lý kiến thức và tạo nội dung.</p><div class="feed-foot"><span class="stars">★ 1.8k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="kyegomez/OpenMythos"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/kyegomez/OpenMythos" target="_blank" class="feed-name">OpenMythos</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('kyegomez/OpenMythos','https://github.com/kyegomez/OpenMythos',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('kyegomez/OpenMythos','https://github.com/kyegomez/OpenMythos',false,this)">👎</button></div></div><p class=feed-domain style=color:#e879f9>🔮 GenAI</p><p class="feed-problem">Simplifying the definition, configuration, and instantiation of large-scale AI models across a wide range of parameter sizes.</p><div class="feed-foot"><span class="stars">★ 1.8k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="MemPalace/mempalace"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/MemPalace/mempalace" target="_blank" class="feed-name">mempalace</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('MemPalace/mempalace','https://github.com/MemPalace/mempalace',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('MemPalace/mempalace','https://github.com/MemPalace/mempalace',false,this)">👎</button></div></div><p class=feed-domain style=color:#60a5fa>💬 NLP</p><p class="feed-problem">Giải quyết vấn đề truy xuất thông tin hiệu quả và chính xác từ các ngữ cảnh dài (long-term memory) cho hệ thống AI/LLM.</p><div class="feed-foot"><span class="stars">★ 47.8k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="Tencent-Hunyuan/HY-World-2.0"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/Tencent-Hunyuan/HY-World-2.0" target="_blank" class="feed-name">HY-World-2.0</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('Tencent-Hunyuan/HY-World-2.0','https://github.com/Tencent-Hunyuan/HY-World-2.0',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('Tencent-Hunyuan/HY-World-2.0','https://github.com/Tencent-Hunyuan/HY-World-2.0',false,this)">👎</button></div></div><p class=feed-domain style=color:#a78bfa>🌐 Multimodal</p><p class="feed-problem">Xây dựng một mô hình thế giới đa phương thức có khả năng tái tạo, tạo ra và mô phỏng các thế giới 3D một cách hiệu quả.</p><div class="feed-foot"><span class="stars">★ 1.1k</span><div class="score-meter"><div class="score-meter-fill" style="width:100%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">100</span></div></article><article class="feed-card" data-repo="Manavarya09/design-extract"><div class="feed-head"><div class="feed-title-row"><a href="https://github.com/Manavarya09/design-extract" target="_blank" class="feed-name">design-extract</a><span class="cat-badge trend">Trending AI</span></div><div class="feed-actions"><button class="btn-like" title="Like" onclick="setPref('Manavarya09/design-extract','https://github.com/Manavarya09/design-extract',true,this)">👍</button><button class="btn-dislike" title="Dislike" onclick="setPref('Manavarya09/design-extract','https://github.com/Manavarya09/design-extract',false,this)">👎</button></div></div><p class=feed-domain style=color:#94a3b8>⚙ Other</p><p class="feed-problem">Tự động trích xuất và phân tích toàn diện các thuộc tính thiết kế hình ảnh và cấu trúc layout của một trang web để hiểu ngôn ngữ thiết kế của nó một cách có lập trình.</p><div class="feed-foot"><span class="stars">★ 1.0k</span><div class="score-meter"><div class="score-meter-fill" style="width:97.5%;background:#4ade80"></div></div><span class="score-val" style="color:#4ade80">97.5</span></div></article></div></div><div class="itab-panel" id="itab-papers"><div class="papers-list"><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18389v1" target="_blank" class="paper-title">Understanding the Prompt Sensitivity</a><p class="paper-authors">Yang Liu, Chenhui Chu</p><p class="paper-abstract">Prompt sensitivity, which refers to how strongly the output of a large language model (LLM) depends on the exact wording of its input prompt, raises concerns among users about the LLM's stability and reliability. In this…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18490v1" target="_blank" class="paper-title">LQM: Linguistically Motivated Multidimensional Quality Metrics for Machine Translation</a><p class="paper-authors">Samar M. Magdy, Fakhraddin Alwajih, Abdellah El Mekki et al.</p><p class="paper-abstract">Existing MT evaluation frameworks, including automatic metrics and human evaluation schemes such as Multidimensional Quality Metrics (MQM), are largely language-agnostic. However, they often fail to capture dialect- and …</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18478v1" target="_blank" class="paper-title">WorldDB: A Vector Graph-of-Worlds Memory Engine with Ontology-Aware Write-Time Reconciliation</a><p class="paper-authors">Harish Santhanalakshmi Ganesan</p><p class="paper-abstract">Persistent memory is the bottleneck separating stateless chatbots from long-running agentic systems. Retrieval-augmented generation (RAG) over flat vector stores fragments facts into chunks, loses cross-session identity,…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18395v1" target="_blank" class="paper-title">Capturing Monetarily Exploitable Vulnerability in Smart Contracts via Auditor Knowledge-Learning Fuzzing</a><p class="paper-authors">Bowen Cai, Weiheng Bai, Hangyun Tang et al.</p><p class="paper-abstract">Smart contracts extended blockchain functionality beyond simple transactions, powering complex applications like decentralized finance (DeFi). However, this complexity introduces serious security challenges, including pr…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18423v1" target="_blank" class="paper-title">BhashaSutra: A Task-Centric Unified Survey of Indian NLP Datasets, Corpora, and Resources</a><p class="paper-authors">Raghvendra Kumar, Devankar Raj, Sriparna Saha</p><p class="paper-abstract">India's linguistic landscape, spanning 22 scheduled languages and hundreds of marginalized dialects, has driven rapid growth in NLP datasets, benchmarks, and pretrained models. However, no dedicated survey consolidates r…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18248v1" target="_blank" class="paper-title">Beyond Pattern Matching: Seven Cross-Domain Techniques for Prompt Injection Detection</a><p class="paper-authors">Thamilvendhan Munirathinam</p><p class="paper-abstract">Current open-source prompt-injection detectors converge on two architectural choices: regular-expression pattern matching and fine-tuned transformer classifiers. Both share failure modes that recent work has made concret…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18508v1" target="_blank" class="paper-title">Document-as-Image Representations Fall Short for Scientific Retrieval</a><p class="paper-authors">Ghazal Khalighinejad, Raghuveer Thirukovalluru, Alexander H. Oh et al.</p><p class="paper-abstract">Many recent document embedding models are trained on document-as-image representations, embedding rendered pages as images rather than the underlying source. Meanwhile, existing benchmarks for scientific document retriev…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18429v1" target="_blank" class="paper-title">Revisiting Change VQA in Remote Sensing with Structured and Native Multimodal Qwen Models</a><p class="paper-authors">Yakoub Bazi, Mohamad M. Al Rahhal, Mansour Zuair et al.</p><p class="paper-abstract">Change visual question answering (Change VQA) addresses the problem of answering natural-language questions about semantic changes between bi-temporal remote sensing (RS) images. Although vision-language models (VLMs) ha…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18454v1" target="_blank" class="paper-title">Geometric Trajectory Optimization for TRACON Arrivals: An NLP Approach with ATC Vectoring Maneuver Modeling</a><p class="paper-authors">Yutian Pang, Daniel Delahaye, John-Paul Clarke</p><p class="paper-abstract">Terminal airspace congestion remains a major bottleneck in the global air traffic network. Although the Aircraft Sequencing and Scheduling Problem (ASSP) has been widely studied, many methods rely on simplified node-link…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18573v1" target="_blank" class="paper-title">T-REN: Learning Text-Aligned Region Tokens Improves Dense Vision-Language Alignment and Scalability</a><p class="paper-authors">Savya Khosla, Sethuraman T, Aryan Chadha et al.</p><p class="paper-abstract">Despite recent progress, vision-language encoders struggle with two core limitations: (1) weak alignment between language and dense vision features, which hurts tasks like open-vocabulary semantic segmentation; and (2) h…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18584v1" target="_blank" class="paper-title">MathNet: a Global Multimodal Benchmark for Mathematical Reasoning and Retrieval</a><p class="paper-authors">Shaden Alshammari, Kevin Wen, Abrar Zainal et al.</p><p class="paper-abstract">Mathematical problem solving remains a challenging test of reasoning for large language and multimodal models, yet existing benchmarks are limited in size, language coverage, and task diversity. We introduce MathNet, a h…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18364v1" target="_blank" class="paper-title">Training and Agentic Inference Strategies for LLM-based Manim Animation Generation</a><p class="paper-authors">Ravidu Suien Rammuni Silva, Ahmad Lotfi, Isibor Kennedy Ihianle et al.</p><p class="paper-abstract">Generating programmatic animation using libraries such as Manim presents unique challenges for Large Language Models (LLMs), requiring spatial reasoning, temporal sequencing, and familiarity with domain-specific APIs tha…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18320v1" target="_blank" class="paper-title">EVE: Verifiable Self-Evolution of MLLMs via Executable Visual Transformations</a><p class="paper-authors">Yongrui Heng, Chaoya Jiang, Han Yang et al.</p><p class="paper-abstract">Self-evolution of multimodal large language models (MLLMs) remains a critical challenge: pseudo-label-based methods suffer from progressive quality degradation as model predictions drift, while template-based methods are…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18287v1" target="_blank" class="paper-title">Constraining the trend of the $N = 50$ shell gap towards $^{100}$Sn with the masses of $^{96-98}$Cd</a><p class="paper-authors">D. Lange, D. Atanasov, M. Au et al.</p><p class="paper-abstract">We present the first determination of the $N = 50$ empirical shell gap at $Z = 48$ by precise mass measurements of the neutron-deficient cadmium isotopes $^{96-98}$Cd with the ISOLTRAP mass spectrometer at ISOLDE-CERN, i…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18575v1" target="_blank" class="paper-title">ReCap: Lightweight Referential Grounding for Coherent Story Visualization</a><p class="paper-authors">Aditya Arora, Akshita Gupta, Pau Rodriguez et al.</p><p class="paper-abstract">Story Visualization aims to generate a sequence of images that faithfully depicts a textual narrative that preserve character identity, spatial configuration, and stylistic coherence as the narratives unfold. Maintaining…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18570v1" target="_blank" class="paper-title">A multimodal and temporal foundation model for virtual patient representations at healthcare system scale</a><p class="paper-authors">Andrew Zhang, Tong Ding, Sophia J. Wagner et al.</p><p class="paper-abstract">Modern medicine generates vast multimodal data across siloed systems, yet no existing model integrates the full breadth and temporal depth of the clinical record into a unified patient representation. We introduce Apollo…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18460v1" target="_blank" class="paper-title">Learning Invariant Modality Representation for Robust Multimodal Learning from a Causal Inference Perspective</a><p class="paper-authors">Sijie Mai, Shiqin Han</p><p class="paper-abstract">Multimodal affective computing aims to predict humans' sentiment, emotion, intention, and opinion using language, acoustic, and visual modalities. However, current models often learn spurious correlations that harm gener…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18191v1" target="_blank" class="paper-title">Implementing CPSLint: A Data Validation and Sanitisation Tool for Industrial Cyber-Physical Systems</a><p class="paper-authors">Uraz Odyurt, Ömer Sayilir, Mariëlle Stoelinga et al.</p><p class="paper-abstract">Raw datasets are often too large and unstructured to work with directly, and require a data preparation phase. The domain of industrial Cyber-Physical Systems (CPSs) is no exception, as raw data typically consists of lar…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18579v1" target="_blank" class="paper-title">The T16 Planet Hunt: 10,000 New Planet Candidates from TESS Cycle 1 and the Confirmation of a Hot Jupiter Around TIC 183374187</a><p class="paper-authors">Joshua T. Roth, Joel D. Hartman, Gáspár Á. Bakos et al.</p><p class="paper-abstract">The T16 project has produced a uniformly detrended and systematics-corrected set of 83,717,159 TESS Cycle 1 full-frame image light curves for stars observed by TESS in its primary mission down to T=16 mag, enabling sensi…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18572v1" target="_blank" class="paper-title">Back into Plato's Cave: Examining Cross-modal Representational Convergence at Scale</a><p class="paper-authors">A. Sophia Koepke, Daniil Zverev, Shiry Ginosar et al.</p><p class="paper-abstract">The Platonic Representation Hypothesis suggests that neural networks trained on different modalities (e.g., text and images) align and eventually converge toward the same representation of reality. If true, this has sign…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18466v1" target="_blank" class="paper-title">pyTRAIN -- a modern TRAIN implementation</a><p class="paper-authors">Michi Hostettler, Xavier Buffat, Tobias Persson et al.</p><p class="paper-abstract">The TRAIN code, developed in 1995 as a post-processor for second-order transport maps from MAD, has been used extensively at the LEP and the LHC to study self-consistent closed orbits, tunes and chromaticities of bunch t…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18576v1" target="_blank" class="paper-title">Agentic Forecasting using Sequential Bayesian Updating of Linguistic Beliefs</a><p class="paper-authors">Kevin Murphy</p><p class="paper-abstract">We present BLF (Bayesian Linguistic Forecaster), an agentic system for binary forecasting that achieves state-of-the-art performance on the ForecastBench benchmark. The system is built on three ideas. (1) A Bayesian ling…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18574v1" target="_blank" class="paper-title">When Can LLMs Learn to Reason with Weak Supervision?</a><p class="paper-authors">Salman Rahman, Jingyan Shen, Anna Mordvina et al.</p><p class="paper-abstract">Large language models have achieved significant reasoning improvements through reinforcement learning with verifiable rewards (RLVR). Yet as model capabilities grow, constructing high-quality reward signals becomes incre…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18538v1" target="_blank" class="paper-title">Fast and Forgettable: A Controlled Study of Novices' Performance, Learning, Workload, and Emotion in AI-Assisted and Human Pair Programming Paradigms</a><p class="paper-authors">Nicholas Gardella, James Prather, Juho Leinonen et al.</p><p class="paper-abstract">Code-generating Artificial Intelligence has gained popularity within both professional and educational programming settings over the past several years. While research and pedagogy are beginning to cope with this change,…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18413v1" target="_blank" class="paper-title">TypeScript Repository Indexing for Code Agent Retrieval</a><p class="paper-authors">Junsong Pu, Yichen Li, Zhuangbin Chen</p><p class="paper-abstract">Graph-based code indexing can improve context retrieval for LLM-based code agents by preserving call chains and dependency relationships that keyword search and similarity retrieval often miss. ABCoder is an open-source …</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18401v1" target="_blank" class="paper-title">StepPO: Step-Aligned Policy Optimization for Agentic Reinforcement Learning</a><p class="paper-authors">Daoyu Wang, Qingchuan Li, Mingyue Cheng et al.</p><p class="paper-abstract">General agents have given rise to phenomenal applications such as OpenClaw and Claude Code. As these agent systems (a.k.a. Harnesses) strive for bolder goals, they demand increasingly stronger agentic capabilities from f…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18578v1" target="_blank" class="paper-title">Bounded Ratio Reinforcement Learning</a><p class="paper-authors">Yunke Ao, Le Chen, Bruce D. Lee et al.</p><p class="paper-abstract">Proximal Policy Optimization (PPO) has become the predominant algorithm for on-policy reinforcement learning due to its scalability and empirical robustness across domains. However, there is a significant disconnect betw…</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18111v1" target="_blank" class="paper-title">Smokescreen: A Python package for data vector blinding and encryption in cosmological analyses</a><p class="paper-authors">Arthur Loureiro, Jessica Muir, Jonathan Blazek et al.</p><p class="paper-abstract">Smokescreen is an open-source Python library for data-vector concealment (blinding) in cosmological analyses. Data-vector blinding works by applying cosmology-dependent shifts to the observed data vector, moving it away …</p></article><article class="paper-card"><div class="paper-date">2026-04-20</div><a href="https://arxiv.org/abs/2604.18566v1" target="_blank" class="paper-title">Benchmarking System Dynamics AI Assistants: Cloud Versus Local LLMs on CLD Extraction and Discussion</a><p class="paper-authors">Terry Leitch</p><p class="paper-abstract">We present a systematic evaluation of large language model families -- spanning both proprietary cloud APIs and locally-hosted open-source models -- on two purpose-built benchmarks for System Dynamics AI assistance: the …</p></article><article class="paper-card"><div class="paper-date">2026-04-19</div><a href="https://arxiv.org/abs/2604.17309v1" target="_blank" class="paper-title">Knows: Agent-Native Structured Research Representations</a><p class="paper-authors">Guangsheng Yu, Xu Wang</p><p class="paper-abstract">Research artifacts are distributed primarily as reader-oriented documents like PDFs. This creates a bottleneck for increasingly agent-assisted and agent-native research workflows, in which LLM agents need to infer fine-g…</p></article></div></div><div class="itab-panel" id="itab-analysis"><div class="analysis-card"><div class="analysis-prose"><h2 class="md-h2">👤 Dành riêng cho bạn</h2>
 <p class="md-p">Tôi biết rằng bạn quan tâm đến các dự án trong lĩnh vực GenAI, đặc biệt là những dự án thuộc danh mục Trending AI. Vì vậy, tôi đã chọn ra một số repository phù hợp với sở thích của bạn. Các repository như caveman, holaOS, OpenMontage, how-claude-code-works và cc-skills-golang đều nằm trong danh mục Trending AI và có thể giúp bạn tìm hiểu thêm về công nghệ GenAI.</p>
 <h2 class="md-h2">🔬 Từ lab đến code</h2>
 <p class="md-p">Tôi thấy rằng có một số paper trên ArXiv đang được nghiên cứu và có thể được implement trong tương lai. Ví dụ, paper "Implementing CPSLint: A Data Validation and Sanitisation Tool" có thể giúp cải thiện độ chính xác và bảo mật của các mô hình AI. Tuy nhiên, vẫn còn một số gap trong việc áp dụng các công nghệ này vào thực tế. Ví dụ, việc áp dụng các mô hình AI vào các lĩnh vực như sản xuất video hoặc lập trình vẫn còn gặp nhiều khó khăn.</p>
@@ -667,86 +296,42 @@ function renderStars(id, repos) {
 <li class="md-li">holaOS: Đây là một dự án cung cấp một môi trường cho các tác nhân AI để thực hiện các nhiệm vụ. Dự án này có thể giúp bạn tìm hiểu thêm về cách xây dựng các hệ thống AI tự động.</li>
 </ul>
 <h2 class="md-h2">🧭 Gợi ý mở rộng</h2>
-<p class="md-p">Nếu bạn muốn khám phá thêm về lĩnh vực GenAI, tôi khuyên bạn nên tìm hiểu về các công nghệ như tự động hóa, điều phối và tối ưu hóa. Bạn cũng có thể tìm hiểu về các ứng dụng của GenAI trong các lĩnh vực như sản xuất video, lập trình và bảo mật. Ngoài ra, bạn cũng có thể tìm hiểu về các công nghệ mới như CPSLint và Smokescreen, giúp cải thiện độ chính xác và bảo mật của các mô hình AI.</p></div></div>
-  </div>
-  <aside class="insight-sidebar">
-    <p class="sidebar-label">Your preferences</p>
-    <div id="pref-list"><p class="empty-sm">Like/dislike repos to build your profile.</p></div>
-  </aside>
-</div>
-<script>
-const SB_URL = "https://qsbiirhvruttcpoondzc.supabase.co";
-const SB_KEY = "sb_publishable_9PRtPgWwB9XYVo2ZOc1nXw_Pc59S7Xe";
-function switchItab(name, btn) {
-  document.querySelectorAll('.itab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.itab-panel').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('itab-'+name).classList.add('active');
-}
-async function setPref(repoName, repoUrl, liked, btn) {
-  const sibling = btn.parentNode.querySelector(liked?'.btn-dislike':'.btn-like');
-  btn.classList.toggle('active'); sibling.classList.remove('active');
-  const isActive = btn.classList.contains('active');
-  await fetch(SB_URL+'/rest/v1/repo_preferences', {
-    method:'POST', headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
-    body: JSON.stringify({repo_name:repoName, repo_url:repoUrl, liked: isActive ? liked : null})
-  });
-  loadPrefs();
-}
-async function loadPrefs() {
-  try {
-    const r = await fetch(SB_URL+'/rest/v1/repo_preferences?select=*&order=created_at.desc&limit=20', {headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
-    const prefs = await r.json();
-    prefs.forEach(p => {
-      const lb = document.querySelector(`[data-repo="${p.repo_name}"] .btn-like`);
-      const db2 = document.querySelector(`[data-repo="${p.repo_name}"] .btn-dislike`);
-      if(lb)  lb.classList.toggle('active', p.liked===true);
-      if(db2) db2.classList.toggle('active', p.liked===false);
-    });
-    const liked    = prefs.filter(p=>p.liked===true);
-    const disliked = prefs.filter(p=>p.liked===false);
-    document.getElementById('pref-list').innerHTML = [
-      ...liked.map(p=>`<div class="pref-row"><span>${p.repo_name.split('/').pop()}</span><span class="badge-like">👍</span></div>`),
-      ...disliked.map(p=>`<div class="pref-row"><span>${p.repo_name.split('/').pop()}</span><span class="badge-dislike">👎</span></div>`),
-    ].join('') || '<p class="empty-sm">No preferences yet.</p>';
-  } catch(e) { console.error(e); }
-}
-loadPrefs();
-</script></div>
+<p class="md-p">Nếu bạn muốn khám phá thêm về lĩnh vực GenAI, tôi khuyên bạn nên tìm hiểu về các công nghệ như tự động hóa, điều phối và tối ưu hóa. Bạn cũng có thể tìm hiểu về các ứng dụng của GenAI trong các lĩnh vực như sản xuất video, lập trình và bảo mật. Ngoài ra, bạn cũng có thể tìm hiểu về các công nghệ mới như CPSLint và Smokescreen, giúp cải thiện độ chính xác và bảo mật của các mô hình AI.</p></div></div></div></div><aside class="insight-sidebar"><div class="sidebar-section"><p class="sidebar-lbl">Your likes</p><div id="liked-list"><p class="empty-sm">No likes yet.</p></div></div><div class="sidebar-section"><p class="sidebar-lbl">Your dislikes</p><div id="disliked-list"><p class="empty-sm">No dislikes yet.</p></div></div></aside></div><script>const SB_URL="https://qsbiirhvruttcpoondzc.supabase.co",SB_KEY="sb_publishable_9PRtPgWwB9XYVo2ZOc1nXw_Pc59S7Xe";function switchItab(name,btn){document.querySelectorAll(".itab").forEach(b=>b.classList.remove("active"));document.querySelectorAll(".itab-panel").forEach(p=>p.classList.remove("active"));btn.classList.add("active");document.getElementById("itab-"+name).classList.add("active");}async function setPref(name,url,liked,btn){const sib=btn.parentNode.querySelector(liked?".btn-dislike":".btn-like");btn.classList.toggle("active");sib.classList.remove("active");const isActive=btn.classList.contains("active");try{await fetch(SB_URL+"/rest/v1/repo_preferences",{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},body:JSON.stringify({repo_name:name,repo_url:url,liked:isActive?liked:null})});loadPrefs();}catch(e){console.error(e);}}async function loadPrefs(){if(!SB_URL||!SB_KEY)return;try{const r=await fetch(SB_URL+"/rest/v1/repo_preferences?select=*&order=created_at.desc&limit=30",{headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}});const prefs=await r.json();prefs.forEach(p=>{const lb=document.querySelector(`[data-repo="${p.repo_name}"] .btn-like`);const db=document.querySelector(`[data-repo="${p.repo_name}"] .btn-dislike`);if(lb)lb.classList.toggle("active",p.liked===true);if(db)db.classList.toggle("active",p.liked===false);});const liked=prefs.filter(p=>p.liked===true);const disliked=prefs.filter(p=>p.liked===false);document.getElementById("liked-list").innerHTML=liked.map(p=>`<div class="pref-row pref-like">${p.repo_name.split("/").pop()}</div>`).join("")||'<p class="empty-sm">No likes yet.</p>';document.getElementById("disliked-list").innerHTML=disliked.map(p=>`<div class="pref-row pref-dislike">${p.repo_name.split("/").pop()}</div>`).join("")||'<p class="empty-sm">No dislikes yet.</p>';}catch(e){console.error(e);}}loadPrefs();</script></div>
 
-</div>
 <script>
 
-function mdHtml(text) {
-  if (!text) return '';
-  return text
-    .replace(/## (.*)/g, '<h2 class="md-h2">$1</h2>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-    .replace(/^- (.*)/gm, '<li class="md-li">$1</li>')
-    .replace(/(<li[^>]*>.*<\/li>\n?)+/g, m => '<ul class="md-ul">'+m+'</ul>')
-    .replace(/\n\n/g, '</p><p class="md-p">')
-    .replace(/^(?!<)/gm, '')
-    .replace(/<p class="md-p"><\/p>/g, '');
+function mdHtml(t){
+  if(!t)return'';
+  return t
+    .replace(/## (.*)/g,'<h2 class="md-h2">$1</h2>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/^[-*] (.+)/gm,'<li class="md-li">$1</li>')
+    .replace(/(<li[\s\S]*?<\/li>\n?)+/g,m=>'<ul class="md-ul">'+m+'</ul>')
+    .split('\n\n').map(b=>b.startsWith('<')?b:`<p class="md-p">${b}</p>`).join('');
 }
 
-
-function switchTab(name, btn) {
+function switchTab(name,btn){
   document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
 }
-
-function filterCards(type, btn) {
+let _activeFilter='all',_searchQ='';
+function filterCards(type,btn){
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+  btn.classList.add('active');_activeFilter=type;_applyFilters();
+}
+function searchCards(q){_searchQ=q.toLowerCase().trim();_applyFilters();}
+function _applyFilters(){
+  let v=0;
   document.querySelectorAll('.card').forEach(c=>{
-    const cat=c.dataset.cat, score=parseFloat(c.dataset.score||0);
-    let show = type==='all' || (type==='XAI'&&cat==='XAI') ||
-      (type==='Trending AI'&&cat==='Trending AI') || (type==='high'&&score>=70);
-    c.style.display = show ? '' : 'none';
+    const cat=c.dataset.cat,score=parseFloat(c.dataset.score||0),dom=c.dataset.domain||'',src=c.dataset.search||'';
+    const byFilter=_activeFilter==='all'||((_activeFilter==='XAI')&&cat==='XAI')||((_activeFilter==='Trending AI')&&cat==='Trending AI')||(_activeFilter==='high'&&score>=70)||(_activeFilter===dom);
+    const bySearch=!_searchQ||src.includes(_searchQ);
+    const show=byFilter&&bySearch;c.style.display=show?'':'none';if(show)v++;
   });
+  const b=document.getElementById('count-badge');if(b)b.textContent=v+' repos';
 }
 </script>
 </body>
