@@ -1,12 +1,6 @@
 # ⬡ AI Hub
 
-Hệ thống tự động theo dõi, phân tích và trực quan hoá xu hướng AI từ GitHub và ArXiv — gộp từ **ai-tracker**, **ai-weekly**, và **ai-insight** thành một repo duy nhất với một dashboard.
-
-[![Daily Pipeline](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/daily_pipeline.yml/badge.svg)](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/daily_pipeline.yml)
-[![Weekly Pipeline](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/weekly_pipeline.yml/badge.svg)](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/weekly_pipeline.yml)
-[![Insight Pipeline](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/insight_pipeline.yml/badge.svg)](https://github.com/YOUR_USERNAME/ai-hub/actions/workflows/insight_pipeline.yml)
-
-🌐 **Dashboard:** `https://YOUR_USERNAME.github.io/ai-hub`
+🌐 **Dashboard:** `https://thuingit.github.io/ai-github-news`
 
 ---
 
